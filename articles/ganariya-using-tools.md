@@ -1,7 +1,12 @@
 ---
-title: ""
+title: "ganariyaが使っているツールまとめ"
 emoji: "🐥"
-type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+type: "idea" # tech: 技術記事 / idea: アイデア
+topics: ["ツール"]
 published: true
 ---
+
+# はじめに
+
+ganariyaが使っているツールをまとめていきます。
+（主に別PCを買ったときの再現のため。dotfilesも掲載する。）
