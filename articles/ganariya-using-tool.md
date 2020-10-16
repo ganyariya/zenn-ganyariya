@@ -15,6 +15,69 @@ ganariyaが使っているツールをまとめていきます。
 
 # アプリ
 
+- Vrew
+- LINE
+- Papers
+- RunCat
+- DeepL
+- Slack
+- Lifeline
+- Remote Desktop
+- VSCode
+- Docker
+- XCode
+- Visual Studio
+- GitKraken
+- Discord
+- CommentScreen
+- Biscuit
+- Skype
+- VLC
+- Breakfast
+- Teams
+- Karabiner
+- HyperSwitch
+- CheetSheet
+- POmello
+- Atom
+- Pomy
+- Bitwarden
+- Julia
+- VirtualBox
+- Grammaly
+- GoogleJapaneseInput
+- Zoom
+- Trello
+- R
+- Airy
+- ManyCam
+- Steam
+- Inkscape
+- HotKey
+- Notion
+- mpv
+- Processing3
+- Alfread
+- KeyCastr
+- JustFocus
+- KeiSignal
+- Gyazo
+- OBS
+- ImageOptim
+- duet
+- AppClearner
+- draw.io
+- LadioCast
+- Microsoft One
+- XMind
+- Spotify
+- astah
+- MAMP
+- Chrome
+- Bootstrap
+- Skitch
+- 
+
 # 環境
 
 - nodejs (nodebrew)
@@ -39,4 +102,8 @@ ganariyaが使っているツールをまとめていきます。
 - starship
 - tldr
 - tree
-
+- nnn
+- ttygif
+- gitui
+- Rigellute/tap/spotify-tui
+- asciinema
