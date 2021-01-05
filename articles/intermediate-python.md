@@ -1,5 +1,5 @@
 ---
-title: "Python中級者になるためにModern Pythonを目指す"
+title: "Python中級者になるためのModern Python"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['python', 'modern']
@@ -52,7 +52,9 @@ Pythonは良くも悪くも以下のような特徴があります。
 
 
 今回は、これらの問題を解決できる可能性があるツールについてまとめます。
-もっと自分もはやくPythonに慣れていきたいですね。
+ただし、実際の使い方や詳細については割愛しているため、他記事を参考ください。
+
+もっと自分もはやくPythonに慣れて中級者になっていきたいです。
 
 
 # パッケージマネージャ
@@ -263,10 +265,85 @@ docstringは書き方のリファレンスが少なく、何かのライブラ�
 - [\[Python\]可読性を上げるための、docstringの書き方を学ぶ（NumPyスタイル）](https://qiita.com/simonritchie/items/49e0813508cad4876b5a)
 - [チームメイトのためにdocstringを書こう！](https://www.slideshare.net/cocodrips/docstring-pyconjp2019)
 - [numpy/numpy](https://github.com/numpy/numpy)
+- [Pythonでdocstringを書く (Numpy-Style)](https://scrapbox.io/ganariya-public/Python%E3%81%A7docstring%E3%82%92%E6%9B%B8%E3%81%8F_(Numpy-Style))
 
 # スタイルガイド
+
+コードを複数人で書くと、それぞれ異なるコードの書き方の癖が現れます。
+`"` or `'`, 文字数, 変数の付け方など様々です。
+
+異なるコードスタイルを統一的にするためにコードチェック・Lint・フォーマッターなどがあります。
+これらを用いることでより統一的なPythonコードを書くことが出来ます。
+
+この節では、そのうち自分が使っているものについてのみ触れます。
+そのため、これら以外にも他のLinterがあります。ぜひ調べてみてください。
+
+## pep
+
+pepは、`python enhancement proposal`の略で、ドキュメント・コーディング規約を指します。
+Pythonをより良くするための提案書であり、有名なのはpep8です。
+
+pep8は標準ライブラリなどのコーディング規約となっており、多くのPythonのコードはこのpep8を基準にしています。
+
+![](https://storage.googleapis.com/zenn-user-upload/zhin92fp6grcf2i5cuf8u3648gaf)
+
+## flake8
+
+flake8はpipでインストールできるコードのフォーマットをチェックするツールです。
+コーディング規約を守っているかをチェックしてくれます。
+
+flake8は以下3つのライブラリのラッパーになっています。
+
+- PyFlakes
+- pycodestyle
+- mccabe
+
+flake8は、一行の文字数など、細かい規約の設定を行うことが出来ます。
+また、以下のようなflake8-プラグインをpipインストールすると、`flake8`のコマンドを実行したとき、自動でそれらのプラグインも実行してくれます。
+
+- flake8-docstrings
+- flake8-mypy
+- flake8-isort
+- flake8-print
+
+## black
+
+`black`はコードフォーマッターです。
+flake8は`規約違反の箇所を教える`ものでしたが、blackは実際にコードをフォーマットします。
+
+blackの特徴は比較的新しくできたものであり、そして変更できる設定がかなり少ないです。
+そのため、blackを使っておけば多くのプロジェクトで似たような強制フォーマットになります。
+
+blackは非常に使いやすいため、ぜひ使いたいですね。
+
+## mypy
+
+mypyは、コードのアノテーション・型を静的解析して、間違っている型を教えてくれます。
+mypyのおかげで、間違っている箇所の型を治すだけで良くなります。
+
+しかし、利用しているライブラリなどに対してエラーを出すこともあるため、そのときはスタブを生成したり、すでにpipで配布されているスタブをインストールする必要があります。
+
+
+
+## 参考URL
+
+- [pep 0](https://www.python.org/dev/peps/)
+- [flake8](https://flake8.pycqa.org/en/latest/)
+- [black](https://black.readthedocs.io/en/stable/)
+- [mypy](http://www.mypy-lang.org/)
+- [Configuring Flake8](https://flake8.pycqa.org/en/latest/user/configuration.html)
+- [IntelliJやPyCharmでPythonファイルの変更を検知してflake8で文法チェックをする](https://dev.1dz.jp/jetbrains/intellij/flake8_file_watchers/)
+- [Pythonによるパッケージ開発](https://future-architect.github.io/articles/20200820/)
+- [PythonでLintをする](https://scrapbox.io/ganariya-public/Python%E3%81%A7Lint%E3%82%92%E3%81%99%E3%82%8B)
+
+# 設定ファイル
+
+
+# pypi
+
 
 # テスト
 
 
 # ドキュメント
+
