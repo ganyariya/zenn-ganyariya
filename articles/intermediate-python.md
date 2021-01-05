@@ -122,7 +122,7 @@ Python3.5から、上記のように変数や関数などに型を指定でき�
 型を指定することで、IDEの恩恵を受けやすくなります。
 また、長期的に見るとコーディングの効率化に繋がります。
 
-`Final`キーワードもあり、より定数などを安全に設定することが出来ます。
+`Final`キーワードもあり、定数などをより安全に設定することが出来ます。
 
 
 詳しくは参考URLを御覧ください。
@@ -132,7 +132,7 @@ Python3.5から、上記のように変数や関数などに型を指定でき�
 データを格納するクラスをより簡単に作成するデコレータなどを提供します。
 
 ```python
-rom dataclasses import dataclass
+from dataclasses import dataclass
 
 @dataclass
 class InventoryItem:
@@ -149,6 +149,14 @@ class InventoryItem:
 
 名前をつけたタプルを宣言できます。
 書き換えられないデータを保証できるので、変更しないものを管理するには便利そうです。
+
+可能であれば`typing.NamedTuple`を継承したクラスでタプルを宣言したほうがわかりやすいです。
+
+```python
+class Employee(NamedTuple):
+    name: str
+    id: int
+```
 
 ## ジェネリクス
 
@@ -185,4 +193,80 @@ user = User(**external_data)
 - [typings](https://docs.python.org/ja/3/library/typing.html)
 - [dataclasses](https://docs.python.org/ja/3.9/library/dataclasses.html)
 - [namedtuple](https://docs.python.org/ja/3/library/collections.html#collections.namedtuple)
+- [pydantic](https://pydantic-docs.helpmanual.io/)
+- [Pythonではじまる、型のある世界](https://qiita.com/icoxfog417/items/c17eb042f4735b7924a3)
+- [pydanticを使って実行時にも型情報が適用されるPythonコードを書く](https://qiita.com/koralle/items/93b094ddb6d3af917702)
+- [PythonとType Hintsで書くバックエンド](https://engineering.mercari.com/blog/entry/20201105-0a4057b2ba/)
+- [Python 3.9 時代の型安全な Python の極め方](https://www.youtube.com/watch?v=jLQLFFznPIo)
 
+# docstring
+
+`docstring`は、関数やクラスなどの情報を表す文字列です。
+
+関数やクラスがどのような引数・属性を持つのか、どのような振る舞いをするのかを文字列で記述します。
+
+```python
+def add(x:int, y:int) -> int:
+    """add function.
+
+    xとyの和を計算する。
+
+    Attributes
+    ----------
+    x: int
+        足される数
+    y: int
+        足す引数
+
+    Returns
+    -------
+    int
+
+    Notes
+    -----
+    こういう関数に普通はここまで書くことはない（わかるので）
+
+    """
+    return x + y
+```
+
+## docstringのメリット
+
+docstringを書くことで以下のようなメリットがあります。
+
+- 他のチームメンバに関数やクラスの振る舞いを伝えることができる
+- ドキュメントとコードの距離が近い
+- IDEなどにおいて、型や補足情報がより詳細になる
+- 後述しますが、`Sphinx`というドキュメント自動作成ツールでdocstringを利用できる
+- なにより将来の自分のためになる
+
+## スタイルの種類
+
+docstringの書き方にはいくつかの流儀があります。
+主なものは以下の3つです。
+
+- reStructuredText
+- NumPy
+- Google
+
+それぞれ書き方に特徴があります。
+自分の好きな書き方を参照するのが良さそうです。
+また、チームでdocstringの書き方が決まっていればその書き方にならいましょう。
+
+docstringは書き方のリファレンスが少なく、何かのライブラリを参考にすると良さそうです。
+
+## 参考URL
+
+- [NumPyスタイルPython Docstringsの例](https://www.sphinx-doc.org/ja/1.5/ext/example_numpy.html#example-numpy)
+- [numpydoc docstring guide](https://numpydoc.readthedocs.io/en/latest/format.html)
+- [Pythonのドキュメントコメントの書き方(NumPyスタイル編)](https://www.memory-lovers.blog/entry/2019/01/10/003824)
+- [\[Python\]可読性を上げるための、docstringの書き方を学ぶ（NumPyスタイル）](https://qiita.com/simonritchie/items/49e0813508cad4876b5a)
+- [チームメイトのためにdocstringを書こう！](https://www.slideshare.net/cocodrips/docstring-pyconjp2019)
+- [numpy/numpy](https://github.com/numpy/numpy)
+
+# スタイルガイド
+
+# テスト
+
+
+# ドキュメント
