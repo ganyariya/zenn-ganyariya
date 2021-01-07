@@ -370,8 +370,18 @@ setuptools.setup(
 
 プロジェクトをパッケージとしてオンラインで公開したい場合は`setup.py`を書きましょう。
 
-## 
+## requirements.txt
 
+### MANIFEST.in
+
+### setup.cfg
+
+## Pipfile/Piplock
+
+## pyproject.toml
+
+
+## tox.ini
 
 ## 参考URL
 
