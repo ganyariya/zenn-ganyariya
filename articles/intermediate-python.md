@@ -1,16 +1,16 @@
 ---
-title: "中級者になるためのModern Python"
+title: "中級者へのModern Python"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['python', 'modern']
-published: false
+published: true
 ---
 
 # はじめに
 
 ## 本記事の読者対象
 
-- Pythonに慣れてきて、新しい文法・開発環境を覚えたい方
+- Pythonの開発環境・ツールをさらに覚えたい方
 - よりモダンに近いPython環境が欲しい方
 
 ## 想定していない方
@@ -29,31 +29,34 @@ published: false
 説明しない
 
 - 具体的なコマンド
+- 細かい文法
 
 # Modern Python
 
-大学院で研究をするようになってから、長い時間Pythonを書くようになりました。
-なぜならば、研究で利用しやすいライブラリが豊富、かつ研究のようなイテレーションがはやいプロジェクトに対して非常に有効であるためです。
+大学院で研究をするようになってから、かなりの時間Pythonを書くようになりました。
+なぜならば、研究で利用しやすいライブラリが豊富であり、かつ研究のようなイテレーションがはやいプロジェクトに対して非常に有効であるためです。
 
 しかし、Pythonは短期的にコードを試して動作を変更できる分、安定した動作が難しくなってきます。
 たとえば、C++などはコンパイルを通す必要があるため、設計をうまく考えて実装する必要があります。
-一方、Pythonはスクリプト言語なので最悪`闇の設計`をすると実装考えなくてもなんとかなります。
+一方、Pythonはスクリプト言語なので最悪`闇の設計`をすると設計が適当でもなんとかなってしまいます。
 ただ、このような後先考えないコードは将来的に大きな負債になります。
 実際、締め切りが近い論文に合わせて急ピッチで書いたコードが現在自分の前に立ちはだかり、また1から設計・実装し直す羽目になりました。
 
 Pythonは良くも悪くも以下のような特徴があります。
 
-- 型を設定しなくていい（その分、変数名に思いを馳せる）
+- 型を設定しなくていい
+  - その分、変数名に思いを馳せることになる
 - モジュールが多い
   - バージョンがずれる
 - パッケージマネージャーが豊富
   - どれを使えばいいのかが分かりづらい
-- 設計が甘くて良い（読み辛くなる）
+- 設計が甘くて良い
+  - 読み辛くなる
 
 今回は、これらの問題を解決できる可能性があるツールについてまとめます。
 ただし、実際の使い方や詳細については割愛しているため、他記事を参考ください。
 
-もっと自分もはやくPythonに慣れて中級者になっていきたいです。
+自分もはやくPythonに慣れて中級者になっていきたいです。
 
 # パッケージマネージャー
 
@@ -64,12 +67,12 @@ Pythonのパッケージマネージャーには多くの種類の組み合わ�
 ## パターン1: pyenv + pipenv
 
 `pyenv`は**複数のPythonのバージョンを管理**できます。
-たとえば、Python3.7、Python3.8、Python3.9をそれぞれインストールして好きに切り替えることができます。
-バージョンを切り替えることによって、複数のプロジェクトに対応できます。
-昔から続いているプロジェクトのコードはPython2.7でしか動かないんだ！みたいなこともあります。
+具体的には、Python3.7、Python3.8、Python3.9をそれぞれインストールして好きに切り替えることができます。
+このようにPythonのバージョンを切り替えることによって、複数のプロジェクトに対応できます。
+たとえば、昔から続いているプロジェクトのコードはPython2.7でしか動かないんだ！みたいなこともあります。
 そのため、pyenvでバージョンを切り替えられるとうれしいわけです。
 
-しかし、`pyenv`はバージョンを切り替えることはできますが、仮想環境を作成することはできません。
+しかし、pyenvはバージョンを切り替えることはできますが、仮想環境を作成することはできません。
 この仮想環境とはプロジェクトごとに利用する環境のことを本記事では指します。
 
 もし仮想環境を切り分けられない場合を考えてみます。
@@ -78,9 +81,9 @@ Pythonのパッケージマネージャーには多くの種類の組み合わ�
 大量にライブラリが増えてくると動作も重くなり、必要なバージョンの整合性が取れなくなってきます。
 そのため、プロジェクトごとにライブラリをインストールできるような仮想環境が必要なわけです。
 
-そして、`pipenv`は、`あるバージョンのPythonにおいて、複数の仮想環境を作成する`ことができます。
+この問題を解決すべく、`pipenv`は`あるバージョンのPythonにおいて複数の仮想環境を作成する`ことができます。
 venvをラップするような便利な機能がpipenvにたくさん備わっているのでオススメです。
-また、ここでは詳しくは述べませんが、バージョンのロックを行うことができます。
+また、ここでは詳しくは述べませんが、ライブラリのバージョン管理をより賢く行えます。
 
 まとめると、`pyenv`でPython自体のバージョンを管理し、`pipenv`で特定のPythonのバージョンにおける仮想環境を管理します。
 Macではbrewでpipenv, pyenv両方インストールできます。
@@ -107,8 +110,10 @@ Pythonは型付けをしなくても動くスクリプト言語です。
 そのため、初期段階ではかなりのスピードで開発できますが、後半になってくると変数に思いを馳せる時間が長くなり、実行時エラーに悩まされることが多くなります。
 
 そこで、Python3.5から導入された`typing`などを利用して型安全にコーディングできます。
-しかし、**実行時に型が異なってもエラーを出さない**ことに注意が必要です。
-実行時に止まるわけではなく、IDEなどでおかしい部分を指摘されやすくなります。
+しかし、**プログラム実行時、変数に異なる型の内容が入っていてもエラーを出さない**ことに注意が必要です。
+
+実行時に異なる型が入っていても止まりません。
+しかし、IDEの恩恵を受けやすくなったり、第三者がコードの意味を理解しやすくなるため、積極的に書いていきましょう。
 
 ## typing
 
@@ -127,7 +132,7 @@ Python3.5から、上記のように変数や関数などに型を指定でき�
 
 ## data classes
 
-データを格納するクラスをより簡単に作成するデコレータなどを提供します。
+データを格納するクラスを簡単に作成するデコレータなどを提供します。
 
 ```python
 from dataclasses import dataclass
@@ -183,8 +188,8 @@ external_data = {
 user = User(**external_data)
 ```
 
-型があっていないようなデータが入ると**実行時でも**例外を投げてくれます。
-（一方typingなどは投げません。そのため、より型でおかしい箇所がわかりやすく、堅牢性が上がります。）
+型があっていないデータが入ると**実行時でも**例外を投げてくれます。
+（一方typingなどは実行時エラーを投げません。そのため、型でおかしい箇所がよりわかりやすく、堅牢性が上がります。）
 
 ## 参考URL
 
@@ -223,7 +228,6 @@ def add(x:int, y:int) -> int:
     Notes
     -----
     こういう関数に普通はここまで書くことはない（わかるので）
-
     """
     return x + y
 ```
@@ -276,8 +280,8 @@ docstringは書き方のリファレンスが少なく、何かのライブラ�
 
 ## pep
 
-pepは、`python enhancement proposal`の略で、ドキュメント・コーディング規約を指します。
-Pythonをより良くするための提案書であり、有名なのはpep8です。
+`pep`は、`python enhancement proposal`の略で、ドキュメント・コーディング規約を指します。
+Pythonをより良くするための提案書であり、有名なのは`pep8`です。
 
 pep8は標準ライブラリなどのコーディング規約となっており、多くのPythonのコードはこのpep8を基準にしています。
 
@@ -285,7 +289,7 @@ pep8は標準ライブラリなどのコーディング規約となっており�
 
 ## flake8
 
-flake8はpipでインストールできるコードのフォーマットをチェックするツールです。
+`flake8`はpipでインストールできるコードのフォーマットをチェックするツールです。
 コーディング規約を守っているかをチェックしてくれます。
 
 flake8は以下3つのライブラリのラッパーになっています。
@@ -305,7 +309,7 @@ flake8は、一行の文字数など、細かい規約の設定を行うこと�
 ## black
 
 `black`はコードフォーマッターです。
-flake8は`規約違反の箇所を教える`ものでしたが、blackは実際にコードをフォーマットします。
+flake8は`規約違反の箇所を教える`ものでしたが、blackは`実際にコードをフォーマット`します。
 
 blackの特徴は比較的新しくできたものであり、そして変更できる設定がかなり少ないです。
 そのため、blackを使っておけば多くのプロジェクトで似たような強制フォーマットになります。
@@ -314,14 +318,19 @@ blackは非常に使いやすいため、ぜひ使いたいですね。
 
 ## mypy
 
-mypyは、コードのアノテーション・型を静的解析して、間違っている型を教えてくれます。
+`mypy`は、コードのアノテーション・型を静的解析して、間違っている型を教えてくれます。
 mypyのおかげで、間違っている箇所の型を治すだけで良くなります。
 
 しかし、利用しているライブラリなどに対してエラーを出すこともあるため、そのときはスタブを生成したり、すでにpipで配布されているスタブをインストールする必要があります。
 
+## isort
+
+`isort`は、pythonのimportの順番を修正します。
+flake8にisortプラグインがあるため、順番がおかしいと警告されたときにisortをすると良さそうです。
+
 ## 参考URL
 
-- [pep 0](https://www.python.org/dev/peps/)
+- [pep](https://www.python.org/dev/peps/)
 - [flake8](https://flake8.pycqa.org/en/latest/)
 - [black](https://black.readthedocs.io/en/stable/)
 - [mypy](http://www.mypy-lang.org/)
@@ -337,8 +346,9 @@ Pythonのプロジェクトを作る際はいくつかの設定ファイルが�
 
 ## setup.py
 
-setup.pyはプロジェクトを第三者に向けて、配布するために利用するファイルです。
-`setuptools`というモジュールを用いて、プロジェクトのファイルをpipでインストールできるパッケージを作成します。
+`s`etup.py`はプロジェクトを第三者に向けて配布するために利用するファイルです。
+`setuptools`というモジュールを用いて、プロジェクトのファイルをpipでインストールできるようなパッケージを作成します。
+パッケージの情報やインストールの方法、URLなどを記述します。
 
 ```python
 # https://packaging.python.org/tutorials/packaging-projects/?highlight=setup.py#creating-setup-py
@@ -366,35 +376,332 @@ setuptools.setup(
 )
 ```
 
-普段何気なく書いている`pip install numpy`というコマンドは、setup.pyで作成されたパッケージをオンライン（PyPI）から取得し、`site-packages`というパスに入れています。
+普段何気なく書いている`pip install numpy`というコマンドは、setup.pyで作成されたパッケージをオンライン（PyPI）から取得し、`site-packages`というディレクトリに入れています。
 
 プロジェクトをパッケージとしてオンラインで公開したい場合は`setup.py`を書きましょう。
 
 ### MANIFEST.in
 
+`setup.py`でプロジェクトからパッケージを作成するときに、[pythonファイル以外をパッケージに含みたいとき](ソースコード配布物を作成する)があります。
+たとえば、画像ファイルや音声ファイルなどが考えられます。
+
+このとき、`MANIFEST.in`というファイルを作成することによって、より簡単にさまざま々なファイルをパッケージに含めてビルドできます。
+
 ### setup.cfg
+
+`setup.py`はパッケージとして公開、インストールするために必要です。
+しかし、直接Authorやインクルードするファイルなどを指定してしまうと、後から変更しづらくなります。
+
+そこて、設定ファイルである`setup.cfg`を追加で作成することによって、
+パッケージで使う情報を独立して管理できます。
+setup.pyを実行したときに`setup.cfg`があった場合は、情報を取り出して内容を上書きし、それからパッケージを作成します。
+
+```toml
+[metadata]
+name = my_package
+version = attr: src.VERSION
+description = My package description
+long_description = file: README.rst, CHANGELOG.rst, LICENSE.rst
+keywords = one, two
+license = BSD 3-Clause License
+classifiers =
+    Framework :: Django
+    License :: OSI Approved :: BSD License
+    Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.5
+
+[options]
+zip_safe = False
+include_package_data = True
+packages = find:
+scripts =
+    bin/first.py
+    bin/second.py
+install_requires =
+    requests
+    importlib; python_version == "2.6"
+```
 
 ## requirements.txt
 
-## Pipfile/Piplock
+pipでインストールしたパッケージのリストが表されたファイルです。
+必ずしも`requirements.txt`という名前でなくても構いませんが、慣習的にこの名前になっています。
+
+このファイルを作成してGitHubなどに含めることによって、
+`pip install -r requirements.txt`で簡単に第三者がパッケージをインストールできます。
+
+しかし、依存性の解決に向いておらず、ライブラリのバージョンの更新をし辛いなどの問題がrequirements.txtには存在しています。
+そのため、現在はpipenvではPipfile、poetryではpyproject.tomlという、別のパッケージ管理のファイルが利用されています。
+
+## Pipfile/Pipfile.lock
+
+`Pipfile`, `Pipfile.lock`はrequirements.txtの問題を解決したpipenvの管理ファイルです。
+
+Pipfileには、**直接依存する**ライブラリが記入されます。
+たとえば、`requests`を使ってURLを叩くプロジェクトをつくる場合には以下のようなPipfileを作成します。
+
+```yaml
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+```
+
+このとき、`requests`は他のライブラリに依存しています。
+たとえば、`chardet`と呼ばれるファイルの文字コードを判別するライブラリを内部で使用しています。
+
+ここで、`chardet`のバージョンはPipfileには記入されません。
+一方で、ライブラリすべてのバージョンが`Pipfile.lock`に記入されます。
+
+このとき、直接使用したいトップレベルのライブラリは`Pipfile`で管理できるため、簡単にバージョンのアップグレードを検討できます。
+また、依存するライブラリすべてのバージョンは`Pipfile.lock`で管理されるため、第三者が同じ実行環境を簡単に用意できます。
+これによって、依存性の問題をファイルを分けることで解決できました。
 
 ## pyproject.toml
 
+`pyproject.toml`は`PEP 518`で定義された、パッケージの設定を管理するファイルです。
+最近ではpoetryというパッケージマネージャーがこのファイルを利用していますが、
+poetryに限った設定ファイルではないらしいです。
+対応している任意のパッケージマネージャーがpyproject.tomlを使えます。
+
+これまでは、`requirements.txt`, `setup.py`, `setup.cfg`, `MANIFEST.in`など多くのファイルがパッケージ公開に必要でしたが
+pyproject.tomlはこのファイルのみでこれらをすべて補う機能を果たします。
+
+現在pipenvを使っていますが、poetryならびにpyproject.tomlに興味が湧いたため使ってみようと思います。
 
 ## tox.ini
 
+`tox`は、Pythonのテストを自動化するライブラリです。
+toxコマンドを打つことで、`tox.ini`に書かれたテストの内容をすべて自動実行してくれます。
+
+1つの`pytest`ぐらいであれば、毎回そのコマンドを打つだけで良いです。
+しかし、配布するバージョンに合わせて、`python2.7`, `python3.8`, `python3.9`など複数バージョンでテストを行いたいことがあります。
+また、flake8のようなコーディング規約を満たしているかのテストだけを行いたい場合もあります。
+
+そこで、toxならびに設定ファイルtox.iniを使うことで、1コマンドのみですべてのテストを自動実行できます。
+しかも、toxはtoxが扱う特別なディレクトリ内部に他のバージョンのPython環境を作成します。
+そのため、テストごとに仮想環境が作成され、テスト間の依存がないという嬉しさもあります。
+
+```ini
+ [tox]
+ # 使用する環境を指定する
+ # 名前が一致しているflake8-py38は[testenv:flake8-py38]を実行する
+ # py38は[testenv:py38]がないため[testenv]を実行する
+ envlist =
+     py38
+     flake8-py38
+     mypy-py38
+ 
+ [testenv]
+ deps = pipenv
+ # テストで実行するコマンド
+ # このコマンドはpipenv installするだけなので当然テストをパスする
+ commands =
+     pipenv install
+ 
+ [testenv:flake8-py38]
+ basepython = python3.8
+ description = 'check flake8-style is ok?'
+ commands=
+     pipenv install
+     pipenv run flake8 gym_md
+ 
+ # 設定ファイル
+ # https://flake8.pycqa.org/en/latest/user/configuration.html#configuration-locations
+ [flake8-py38]
+ max-line-length = 88
+ 
+ 
+ [testenv:mypy-py38]
+ basepython = python3.8
+ description = 'check my-py is ok?'
+ commands =
+     pipenv install
+     pipenv run mypy gym_md
+```
+
 ## 参考URL
 
+- [tox](https://tox.readthedocs.io/en/latest/)
+- [poetry](https://python-poetry.org/)
 - [Python Packaging User Guide¶](https://packaging.python.org/)
+- [ソースコード配布物を作成する](https://docs.python.org/ja/3/distutils/sourcedist.html)
 - [pythonのsetup.pyについてまとめる](https://qiita.com/Tadahiro_Yamamura/items/2cbcd272a96bb3761cc8)
 - [Python パッケージ管理技術まとめ](https://www.yunabe.jp/docs/python_package_management.html)
 - [【Techの道も一歩から】第21回「setup.pyを書いてpipでインストール可能にしよう」](https://buildersbox.corp-sansan.com/entry/2019/07/11/110000)
+- [Pipfile/Pipfile.lockの必要性 -requirements.txtを用いる手法と比較して-](https://qiita.com/miyashiiii/items/92e6f745a940c4df2ddd)
+- [Pythonのパッケージ周りのベストプラクティスを理解する](https://www.m3tech.blog/entry/python-packaging)
+- [Python パッケージングの標準を知ろう](https://engineer.recruit-lifestyle.co.jp/techblog/2019-12-25-python-packaging-specs/)
+- [Pythonによるパッケージ開発](https://future-architect.github.io/articles/20200820/)
 
-# pypi
+# PyPI
 
+[PyPI](https://pypi.org/)は、pythonのライブラリをアップロードできるサイトです。
+`pip install`をした場合などは、ここからダウンロードされています。
 
 # テスト
 
+pythonには複数のテストツールがあります。
+
+## unittest
+
+標準のテストライブラリは`unittest`です。
+標準パッケージに含まれているため、インストールせずにテストを書けます。
+
+TestCaseクラスを継承し、testから始まるメソッドを作ります。
+
+```python
+import unittest
+
+class TestStringMethods(unittest.TestCase):
+
+    def test_upper(self):
+        self.assertEqual('foo'.upper(), 'FOO')
+
+    def test_isupper(self):
+        self.assertTrue('FOO'.isupper())
+        self.assertFalse('Foo'.isupper())
+
+    def test_split(self):
+        s = 'hello world'
+        self.assertEqual(s.split(), ['hello', 'world'])
+        # check that s.split fails when the separator is not a string
+        with self.assertRaises(TypeError):
+            s.split(2)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+## pytest
+
+`pytest`は、サードパーティ製のテストライブラリです。
+pytestは関数をベースにテストを行い、unittestよりも詳細なエラーを出してくれます。
+
+たとえば、以下のように出力値が間違っていた場合に、間違えた場所とその値を出力します。
+pytestは簡単にかけて出力値もわかりやすいため、私はpytestを使っています。
+
+```python
+# content of test_sample.py
+def inc(x):
+    return x + 1
+
+
+def test_answer():
+    assert inc(3) == 5
+```
+
+```bash
+$ pytest
+=========================== test session starts ============================
+platform linux -- Python 3.x.y, pytest-6.x.y, py-1.x.y, pluggy-0.x.y
+cachedir: $PYTHON_PREFIX/.pytest_cache
+rootdir: $REGENDOC_TMPDIR
+collected 1 item
+
+test_sample.py F                                                     [100%]
+
+================================= FAILURES =================================
+_______________________________ test_answer ________________________________
+
+    def test_answer():
+>       assert inc(3) == 5
+E       assert 4 == 5
+E        +  where 4 = inc(3)
+
+test_sample.py:6: AssertionError
+========================= short test summary info ==========================
+FAILED test_sample.py::test_answer - assert 4 == 5
+============================ 1 failed in 0.12s =============================
+```
+
+## doctest
+
+`doctest`は、さきほど出てきた`docstring`でテストを実行することを可能とします。
+doctestをインポートすると、もしdocstringに`>>>`で実行例が書いてあったらその通りの動作になるかをテストしてくれます。
+
+`pytest`のように、複雑なテストを書くことはできません。
+しかし、docstringの中にあるため、テストとして利用しながら実行例として第三者に提示できます。
+そのため、コードがどのような動作をするのか理解しやすく、コードも変更しやすくなります。
+
+```python
+def square(x):
+    """Return the square of x.
+
+    >>> square(2)
+    4
+    >>> square(-2)
+    4
+    """
+
+    return x * x
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+```
+
+## tox
+
+さきほど出て来ましたが、toxを書くことで複数のテスト・コマンドを自動化できます。
+
+## 参考URL
+
+- [unittest](https://docs.python.org/ja/3/library/unittest.html)
+- [pytest](https://docs.pytest.org/en/stable/)
+- [コードのテスト](https://python-guideja.readthedocs.io/ja/latest/writing/tests.html)
+- [Pytestでテストを書く 自分用](https://scrapbox.io/ganariya-public/Pytest%E3%81%A7%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F)
 
 # ドキュメント
 
+Sphinxは、きれいなドキュメントを簡単につくることができるツールです。
+Pythonのライブラリのリファレンスの多くは、この`Sphinx`で作成されています。
+
+![](https://storage.googleapis.com/zenn-user-upload/xo5992jgw1m3rhaj9z8oijeu4m29)
+
+Sphinxは、`reStructuredText`と呼ばれるマークアップ言語を用いてドキュメントを作成します。
+このとき、自動でドキュメントを作成する機能である`sphinx-apidoc`が付属しており、docstringをPythonコードにきちんと書いていれば、コマンド一発でドキュメントを作成できます。
+そのため、docstringを書くと型や情報などを将来のために残すことができ、しかもそれがそのままリファレンスになります。
+これによって、ドキュメントがコードに比べて更新されなくなり、ドキュメントが形骸化してしまうという負債も発生しづらくなりますね。
+
+ただし、`shpinx-apidoc`によって作成されるbstファイルはデフォルトのため、立派なものにするためには自分で追加編集する必要があります。
+
+## 参考URL
+
+- [Sphinx](https://www.sphinx-doc.org/ja/master/)
+- [ShpinxでPythonプログラムのドキュメントを書こう](https://youtu.be/euiqryTk5uk?t=3309k)
+- [ドキュメントを作りたくなってしまう魔法のツールSphinx](https://www.slideshare.net/shimizukawa/sphinx-6084667)
+- [Sphinxによるドキュメント作成と国際化の事始め](https://qiita.com/tatsurou313/items/8bf7b43842b7827760fa)
+
+# cookiecutter
+
+`cookiecutter`は、Pythonのきれいなプロジェクトを簡単に作成することができるツールです。
+[利用できるテンプレート](https://github.com/topics/cookiecutter-template)がGitHubで公開されており、このテンプレートを指定するとよく設計されたプロジェクトを簡単にローカルに作成できます。
+boilerplateに自分の情報を設定しながら
+ローカルに作成できるツールと考えると良さそうです。
+
+たとえば、[cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)を指定すると簡単に以下が設定されたプロジェクトを作成できます。
+
+- 洗練されたプロジェクト設計
+- TravisCIを用いたテスト自動化
+- Shpinxを用いたドキュメント作成
+- toxを用いた複数環境でのテスト
+- PyPIへの自動リリース
+- CLIインターフェイス（click）
+
+これまで説明してきたものが一括で用意できるのでうれしいですね。
+
+## 参考URL
+
+- [cookiecutter](https://github.com/cookiecutter/cookiecutter)
+- [cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)
+
+# さいごに
+
+Pythonの開発ツールについてまとめてきました。
+まとめる中で、自分もまだまだ理解が浅い、使いこなせていないと実感しました。
+
+`pythonic`なコードが書けるように、毎日練習していきたいです。
