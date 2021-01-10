@@ -1,9 +1,9 @@
 ---
-title: "pLaTeXのGitHub Actionsを作成してPDFをReleasesにアップロードする"
+title: "GitHub ActionsでTeXをコンパイルしてPDFをReleasesにアップロードする"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["GitHub", "GitHub Actions", "latex", "tex"]
-published: false
+topics: ["github", "githubactions", "latex", "tex"]
+published: true
 ---
 
 # はじめに
@@ -36,7 +36,7 @@ Dockerfileは主に`コンテナがシェルスクリプトを実行するため
 
 あとはENTRYPOINTで実行されるシェルスクリプトを指定しておきます。
 
-```Dockerfile
+```dockerfile
 FROM aruneko/texlive:latest
 COPY entrypoint.sh /entrypoint.sh
 COPY .latexmkrc /.latexmkrc
@@ -44,7 +44,7 @@ RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT [ "/entrypoint.sh" ]
 ```
 
-Github Actions実行時に、Dockerfileからイメージがビルドされ、そのイメージからコンテナが作成されます。
+GitHub Actions実行時に、Dockerfileからイメージがビルドされ、そのイメージからコンテナが作成されます。
 そして、`/entrypoint.sh`が実行されます。
 このとき、`entrypoint.sh`はコンテナのトップディレクトリにあります。
 なぜならば、COPYで`/`に配置しているためです。
@@ -52,7 +52,7 @@ Github Actions実行時に、Dockerfileからイメージがビルドされ、�
 しかし、コンテナのワークディレクトリ・カレントディレクトリは**ルートディレクトリではありません。**
 たとえば、先に`actions/checkout@v2`が実行された場合、`/github/workspace`にチェックアウトしたファイルが展開され、カレントディレクトリも`/github/workspace`になっています。
 
-コンテナ実行時のカレントディレクトリは、その他のActionsや`WORKDIR`に依存することに注意指定ください。
+コンテナ実行時のカレントディレクトリは、その他のActionsや`WORKDIR`に依存することに注意してください。
 
 ## action.yml
 
@@ -95,14 +95,14 @@ runs:
 ## shell script
 
 シェルスクリプトを用いて、コンテナ内で実行したいコマンドを実行します。
-すでにDockerfileによって環境は構築されているため、行いたいコマンドを記述するのみです。
+すでにDockerfileによって環境は構築されているため、実行したいコマンドを記述するのみです。
 
 `cp /.latexmkrc .latexmkrc`は、Dockerfile作成時にコピーしておいた.latexmkrcファイルをカレントディレクトリに再コピーしています。
 理由としては、`.latexmkrc`をイメージビルド時にあるディレクトリにおいていたとしても、他のActionを先に実行するとカレントディレクトリが変わることがあります。（おそらくcheckout actionなどではディレクトリを設定できます。）
 
 そのため、とりあえずイメージビルド時はルートにおいておいて、スクリプト実行時にカレントディレクトリに持ってくるようにしています。
 
-`.latexmkrc`をわざわざ持ってきている理由としては、latexmkrcコマンドでコンパイルするため、利用者側のリポジトリに`.latexmkrc`ファイルが用意されていないことがあります。
+`.latexmkrc`をわざわざ持ってきている理由としては、利用者側のリポジトリに`.latexmkrc`ファイルが用意されていないことがあるためです。
 そのため、もし利用者側のリポジトリになければ、デフォルトの`.latexmkrc`として、Actionのリポジトリの`.latexmkrc`を提供しています。
 
 ```bash
@@ -119,4 +119,78 @@ fi
 latexmk $INPUT_LATEX_FILE_NAME
 ```
 
-`INPUT_LATEX_FILE_NAME`でファイルを指定しています。
+`INPUT_LATEX_FILE_NAME`でコンパイルするTeXファイルを与えます。
+
+
+# PDFのアップロード
+
+上記の`platex-action`を用いると、TeXファイルをPDFファイルにコンパイルできます。
+しかし、このままではコンパイルしただけです。
+せっかく作成されたPDFファイルもそのままコンテナごと消去されてしまいます。
+
+そこで、`actions/create-release`と`actions/upload-release-asset@v1`を利用します。
+create-releaseは、`actions/checkout@v2`のディレクトリ`/github/workspace`にあるファイルたちをZipファイルをリリースします。
+
+![](https://storage.googleapis.com/zenn-user-upload/8b3x4bmouvocrwlhjf1cfvqkpcjn)
+
+そして、upload-release-assetを用いると特定のファイルのみをReleaseに作成できます。（上の画像の`main.pdf`.）
+
+これらは、下記のようなyamlファイルを`your-tex-repository/.github/workflows/tex.yaml`に書くことで、PDFのリリースまでを行うことができます。
+
+```yaml
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    name: Example of compiling pdf
+    steps:
+      # make pdf
+      # LATEX_FILE_NAME -> main.pdf generated
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile Tex File
+        id: compile_tex_file
+        uses: tsukuba-mas/platex-action@main
+        with:
+          LATEX_FILE_NAME: "main.tex"
+      # Create Release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: ${{github.ref}}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Compiled PDF ${{github.ref}}
+          draft: false
+          prerelease: false
+      # Upload Asset main.pdf
+      - name: Upload Release Asset
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./main.pdf
+          asset_name: main.pdf
+          asset_content_type: application/pdf
+```
+
+`Create Release`の`with`でタグ名やリリース名、リリース文章のBodyなどをユーザが与えられます。
+また、`upload_url`では、`steps.create_release.outputs.upload_url`のように指定することで、`Create Release`コンテナの出力を再利用できます。
+
+# さいごに
+
+GitHub Actionsを用いてTeXファイルをコンパイルしてPDFを作成しました。
+また、ReleaseならびにUploadアクションを用いることで、そのPDFのアップロードも行いました。
+
+公式のActionと組み合わせると、簡単にアップロードできてうれしいですね。
+とても勉強になりました。
+もっともっとGitHub Actionsに慣れていきたいです。　
