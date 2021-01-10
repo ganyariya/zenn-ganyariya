@@ -536,6 +536,8 @@ toxコマンドを打つことで、`tox.ini`に書かれたテストの内容�
 - [Pythonのパッケージ周りのベストプラクティスを理解する](https://www.m3tech.blog/entry/python-packaging)
 - [Python パッケージングの標準を知ろう](https://engineer.recruit-lifestyle.co.jp/techblog/2019-12-25-python-packaging-specs/)
 - [Pythonによるパッケージ開発](https://future-architect.github.io/articles/20200820/)
+- [Pythonのパッケージングのベストプラクティスについて考える2018](https://techblog.asahi-net.co.jp/entry/2018/06/15/162951)
+- [pythonのbdistとsdistとwheelファイルについて](https://blog.n-t.jp/tech/python-wheel-bdist-sdist-pip/)
 
 # PyPI
 
