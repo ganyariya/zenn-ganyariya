@@ -71,3 +71,6 @@ $100^3 = 10^6$の力になる．
 - https://nrslib.com/geek-sai-2020/
 - https://ganariya.hatenablog.com/entry/2020/12/23/211014
 - https://ganariya.hatenablog.com/entry/2020/08/05/164834
+- https://ganariya.hatenablog.com/entry/2021/03/12/211314
+- https://ganariya.hatenablog.com/entry/2021/03/14/103900
+
