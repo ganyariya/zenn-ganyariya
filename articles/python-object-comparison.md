@@ -3,7 +3,7 @@ title: "pythonのisと==の違いを知りました"
 emoji: "📌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['python']
-published: false
+published: true
 ---
 
 # はじめに
