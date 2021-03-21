@@ -11,7 +11,7 @@ published: true
 pythonのロギングを使うと，サードパーティ製のログも大量に出力されることがあります．
 これはサードパーティのログの出力レベルが，自分のロガーの要求レベル以下である場合に発生します．
 
-また，本記事では以下のように，プロジェクトにおいてルートローがにすべてpropagateしてログ出力する場合を仮定しています．
+また，本記事では以下のように，プロジェクトにおいてルートロガーにすべてpropagateしてログ出力する場合を仮定しています．
 
 ```python
 from logging import getLogger, Logger, FileHandler, StreamHandler, INFO, Formatter, WARNING
@@ -44,7 +44,7 @@ getLogger('matplotlib').setLevel(WARNING)
 上記のようにgetLoggerを設定することによってログの出力を減らせる理由について考えてみます．
 
 通常サードパーティのパッケージでは，`NullHandler`が設定されています．
-このように設定することによって，利用する自分のプロジェクト側で出力形式を設定できるためです．
+このように設定することによって，利用する自分のプロジェクト側で出力形式を設定できるためです．(こうしないと，たとえばサードパーティで発生したログの出力フォーマット形式が，サードパーティ独自の形式になってしまいます．)
 
 https://python-guideja.readthedocs.io/ja/latest/writing/logging.html
 
