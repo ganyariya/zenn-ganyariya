@@ -3,7 +3,7 @@ title: "【志】論文を毎週書く「週論」を始めます"
 emoji: "✨"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["論文", "研究", "TeX", "GitHubActions", "agile"]
-published: false
+published: true
 ---
 
 # はじめに
