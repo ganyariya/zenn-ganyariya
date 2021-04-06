@@ -6,6 +6,16 @@
                 "max": 100
             }
         },
+        "preset-ja-spacing": {
+            "ja-space-between-half-and-full-width": {
+                "space": "always",
+                "exceptPunctuation": true
+            },
+            "ja-space-around-code": {
+                "before": true,
+                "after": true
+            }
+        },
         "prh": {
             "rulePaths": [
                 "node_modules/prh/prh-rules/media/WEB+DB_PRESS.yml"
