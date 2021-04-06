@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v2
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Cache
+      - name: Cache node-modules
         uses: pat-s/always-upload-cache@v2.1.3
         env:
           cache-name: cache-node-modules
