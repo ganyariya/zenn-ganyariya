@@ -27,8 +27,6 @@ jobs:
           key: node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             node-
-      - name: Install textlint
-        run: "npm install --save-dev textlint textlint-rule-preset-ja-technical-writing textlint-rule-prh"
       - name: install dependencies
         run: |
           npm install

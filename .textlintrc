@@ -2,6 +2,9 @@
     "rules": {
         "preset-ja-technical-writing": {
             "ja-no-weak-phrase": false,
+            "sentence-length": {
+                "max": 100
+            }
         },
         "prh": {
             "rulePaths": [
