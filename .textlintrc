@@ -1,4 +1,9 @@
 {
+    "plugins": {
+        "@textlint/markdown": {
+            "extensions": [".md"]
+        }
+    },
     "rules": {
         "preset-ja-technical-writing": {
             "ja-no-weak-phrase": false
