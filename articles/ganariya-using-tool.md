@@ -8,7 +8,7 @@ published: true
 
 # はじめに
 
-ganariyaが使っているツールをまとめていきます。     
+ganariyaが使っているツールをまとめていきます。
 （主に別PCを買ったときの再現のため。dotfilesも掲載する。）
 
 # dotfiles
