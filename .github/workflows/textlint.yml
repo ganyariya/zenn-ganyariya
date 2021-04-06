@@ -2,7 +2,8 @@ name: reviewdog
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   reviewdog-check:
@@ -26,8 +27,11 @@ jobs:
           key: node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             node-
-      - name: install textlint
-        run: "npm install"
+      - name: Install textlint
+        run: "npm install --save-dev textlint textlint-rule-preset-ja-technical-writing textlint-rule-prh"
+      - name: install dependencies
+        run: |
+          npm install
       - name: Execute textlint
         run: |
           npx textlint -f checkstyle "articles/*.md" >> .textlint.log
