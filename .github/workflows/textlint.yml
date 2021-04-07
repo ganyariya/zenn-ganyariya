@@ -39,10 +39,20 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cat .textlint.log | reviewdog -f=checkstyle -name="textlint" -reporter="github-pr-review"
-      - name: Slack Notification
-        if: always()
+      - name: Slack Notification on Success
+        if: success()
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: weekly-textlint
           SLACK_ICON_EMOJI: ":bell:"
+          SLACK_TITLE: Lint Success
+      - name: Slack Notification on Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: weekly-textlint
+          SLACK_ICON_EMOJI: ":bell:"
+          SLACK_TITLE: Lint Failure
+          SLACK_COLOR: danger
