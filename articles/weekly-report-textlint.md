@@ -171,6 +171,16 @@ jobs:
 
 # Zennの執筆環境に lint を追加する
 
-同様に Zenn の執筆環境にも
-flaksfalsk;dfflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkasj;fsdflkajklsajfjlk
+同様に Zenn の執筆環境にも lint ならびに GitHub Actions を追加しました。
+詳細は以下のリポジトリを参考ください。
+
+https://github.com/Ganariya/zenn-ganariya
+
+しかし、とある問題が発生しました。
+これまで私は textlint を入れておらず、新しく textlint を追加した結果、過去の記事で大量に修正箇所が出るようになりました。
+加えて、`zenn-ganariya` リポジトリには main ブランチの protection rule を設定しており、 textlint(ReviewDog) が通らないと main にマージすることができません。
+
+その結果、新しく記事を書いてプルリクエストを出したとしても、過去の記事で lint error が出てマージすることができなくなりました。
+
+
 
