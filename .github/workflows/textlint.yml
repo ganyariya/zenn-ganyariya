@@ -30,13 +30,13 @@ jobs:
       - name: install dependencies
         run: |
           npm install
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - uses: mdecoleman/pr-branch-name@1.0.1
+        id: vars
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Execute textlint
         run: |
-          npx textlint -f checkstyle "articles/${{steps.extract_branch.outputs.branch}}.md" >> .textlint.log
+          npx textlint -f checkstyle "articles/${{steps.vars.outputs.branch}}.md" >> .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
