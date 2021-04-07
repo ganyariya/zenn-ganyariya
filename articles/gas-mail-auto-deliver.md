@@ -3,7 +3,7 @@ title: "GASでカレンダーの予定をGmailで通知する"
 emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googleappsscript", "gmail"]
-published: false
+published: true
 ---
 
 # はじめに
