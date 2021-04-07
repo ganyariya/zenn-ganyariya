@@ -9,6 +9,7 @@ help:
 .PHONY: article
 article: ## SLUG option
 	npx zenn new:article --slug $(SLUG)
+	git checkout -b $(SLUG)
 
 .PHONY: prev iew
 preview: ## PORT option
