@@ -44,7 +44,3 @@ done
 ```
 
 `mas install ID`で AppStore のアプリがインストールできて嬉しいですね。
-
-
-
-

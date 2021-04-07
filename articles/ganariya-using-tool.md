@@ -76,7 +76,7 @@ ganariya が使っているツールをまとめていきます。
 - Chrome
 - Bootstrap
 - Skitch
-- 
+
 
 # 環境
 
