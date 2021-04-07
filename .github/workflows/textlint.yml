@@ -29,7 +29,7 @@ jobs:
             node-
       - name: install dependencies
         run: |
-          npm install}
+          npm install
       - name: Execute textlint
         run: |
           npx textlint -f checkstyle "articles/**.md" >> .textlint.log
