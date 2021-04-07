@@ -33,6 +33,10 @@ jobs:
       - name: Execute textlint
         run: |
           npx textlint -f checkstyle "articles/**.md" >> .textlint.log
+      - uses: nelonoel/branch-name@v1
+      - name: Execute textlint
+        run: |
+          npx textlint -f checkstyle "articles/${BRANCH_NAME}.md" >> .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
