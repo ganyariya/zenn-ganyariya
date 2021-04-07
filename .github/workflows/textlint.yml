@@ -29,14 +29,10 @@ jobs:
             node-
       - name: install dependencies
         run: |
-          npm install
-      - uses: mdecoleman/pr-branch-name@1.0.1
-        id: vars
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          npm install}
       - name: Execute textlint
         run: |
-          npx textlint -f checkstyle "articles/${{steps.vars.outputs.branch}}.md" >> .textlint.log
+          npx textlint -f checkstyle "articles/**.md" >> .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
