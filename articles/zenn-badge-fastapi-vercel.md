@@ -55,7 +55,7 @@ https://github.com/Ganariya/zenn-badge
 [公式のアプリケーション例](https://fastapi.tiangolo.com/ja/#_4)は以下のコードです。
 Flask のような文法で書くことができます。
 ここで、`def read_item(item_id: int, q: str = None)`と引数に型を設定しています。
-実はこれだけで自動で引数に関するバリデーションを行い、かつ SwaggerUI を作成・型の表示を行ってくれます。
+実はこれだけで自動で引数に関するバリデーションを行い、かつ SwaggerUI で型を表示します。
 
 ```python
 from fastapi import FastAPI
@@ -88,7 +88,7 @@ def read_item(item_id: int, q: str = None):
 
 ただ、そもぞも vercel の前身は `ZEIT` 社の `Now` というサービスでした。
 そのため、インターネットの記事が混在していたり、CLI も `now-cli` ->`vercel-cli`になっています。
-このあたりの分かりづらい点と、Python に関するケースが少ないことが課題かなと感じました。
+このあたりが分かりづらく、かつ　Python に関するケースが少ないです。
 Next.js, Nuxt.js は公式のテンプレートもあってかなり分かりやすいのかな、という印象です。
 
 https://github.com/Ganariya/zenn-badge
@@ -107,11 +107,11 @@ vercel にデプロイする前は、開発を GitHub 上で行います。
 
 ## vercelでPython/FastAPIを動作させる
 
-vercel で運用したいサービスの設定を行うために、`now.json`もしくは `vercel.json` を作成します。
+vercel で運用したいサービスを設定するために、`now.json`もしくは `vercel.json` を作成します。
 おそらく Now 時代の名残で `now.json` も使用できますが、公式ドキュメントで扱っているのは[vercel.json](https://vercel.com/docs/configuration#introduction)です。
 いくつか書き方も異なるようです。
 
-今回は参考にしたリポジトリをもとに、`now.json`で設定を行っています。
+今回は参考にしたリポジトリをもとに、`now.json`を設定します。
 
 ```json
 {
@@ -141,7 +141,7 @@ vercel で運用したいサービスの設定を行うために、`now.json`も
 今回はオフにしています。
 
 `builds`では、ビルドするソースコードの指定と、`use`でビルド時に利用するモジュールを指定します。
-今回は PythonOnly なので `@now/python` （正式には、現在は `@vercel/python` ）を利用しています。
+今回は PythonOnly なので `@now/python`（正式には、現在は `@vercel/python`）を利用しています。
 [どうやらbuildsに関するドキュメント](https://vercel.com/docs/configuration#project/builds)を参考にすると、現在は推奨されておらず、かわりに[functions](https://vercel.com/docs/configuration#project/builds)を指定すべきらしいですね。（しかし functions では `/api` ディレクトリにコードを置く必要があり、今回のリポジトリでは違う設計になっているため、かわりに builds を用います。）
 
 `routes`はやってきたクエリのルーティングを行います。
@@ -194,7 +194,8 @@ def main() -> str:
 ```
 
 もともとは絶対ディレクトリ指定で `from zenn_badge.user import User` のようにインポートしていたのですがデプロイしたところエラーを吐きました。
-どうやらマウントされたトップモジュール名が `__vercel__dir__` のような感じになっていて（名前を正確に覚えておらず申し訳ないです）、絶対指定をしようとするとそもそもパスが開発環境と異なっていました。
+どうやらマウントされたトップモジュール名が `__vercel__dir__` のような感じになっていました。
+これによって、絶対指定をしようとすると、そもそもパスが開発環境と異なっていました。
 
 そのため、今回は相対ディレクトリを利用することにしました。
 このあたりの仕様について、もっとしらべていきたいですね。
@@ -210,5 +211,5 @@ def main() -> str:
 - liked, followers など全体を踏まえた　きれいな SVG の作成（GitHub-trophy みたいな）
 - チーム開発（プルリク・イシューなどもらえると嬉しいです）
 
-まだまだサーバレスやバックエンドが苦手なので、もっと色々作る中で勉強して、そして改善していきたいです！
+まだまだサーバレスやバックエンドが苦手なので、もっと色々作る中で勉強して、そして改善していきたいです。
 vercel と netlify, AWS に早いところ慣れたいです。
