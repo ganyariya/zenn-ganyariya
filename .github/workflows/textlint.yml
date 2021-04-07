@@ -32,7 +32,7 @@ jobs:
           npm install
       - name: Execute textlint
         run: |
-          npx textlint -f checkstyle "articles/${GITHUB_REF##*/}" >> .textlint.log
+          npx textlint -f checkstyle "articles/${{GITHUB_REF##*/}}" >> .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
