@@ -30,16 +30,20 @@ jobs:
       - name: install dependencies
         run: |
           npm install
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Execute textlint
         run: |
-          npx textlint -f checkstyle "articles/${{GITHUB_REF##*/}}" >> .textlint.log
+          npx textlint -f checkstyle "articles/${{steps.extract_branch.outputs.branch}}.md" >> .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cat .textlint.log | reviewdog -f=checkstyle -name="textlint" -reporter="github-pr-review"
-      - name: Slack Notification
+        - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
