@@ -20,7 +20,7 @@ published: true
 ### NEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNING
 
 強化学習でアーキテクチャ探索をしている。
-RNNで文字列を生成してそれを子供ネットワークとしどれくらいよいか計算して
+RNN で文字列を生成してそれを子供ネットワークとしどれくらいよいか計算して
 その精度を報酬として、生成方策を修正する。
 
 - https://www.youtube.com/watch?v=sROrvtXnT7Q
@@ -31,10 +31,10 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 
 ### Learning Transferable Architectures for Scalable Image Recognition
 
-上のNEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNINGが重すぎたので
+上の NEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNING が重すぎたので
 セルブロックごとに計算した
 
-ただし、CNNといった、ある程度のDomain知識がひつようになっている
+ただし、CNN といった、ある程度の Domain 知識がひつようになっている
 
 
 - https://qiita.com/cvusk/items/536862d57107b9c190e2
@@ -58,9 +58,9 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 ### DARTS: DIFFERENTIABLE ARCHITECTURE SEARCH
 
 アーキテクチャのノード間に複数の接続を用意して
-それぞれの接続がPooling, Convといった異なるOperationになっている。
+それぞれの接続が Pooling, Conv といった異なる Operation になっている。
 
-これらを少数で重みつけをして、アーキテクチャごと微分できるようにして、どのOperationを選択するか取捨選択できるようになっている。
+これらを少数で重みつけをして、アーキテクチャごと微分できるようにして、どの Operation を選択するか取捨選択できるようになっている。
 
 - https://www.slideshare.net/YutaKoreeda/darts-differentiable-architecture-search
 - https://www.slideshare.net/c-bata/darts-differentiable-architecture-search-at-205326748

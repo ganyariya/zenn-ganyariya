@@ -8,8 +8,8 @@ published: true
 
 # はじめに
 
-ganariyaが使っているツールをまとめていきます。
-（主に別PCを買ったときの再現のため。dotfilesも掲載する。）
+ganariya が使っているツールをまとめていきます。
+（主に別 PC を買ったときの再現のため。dotfiles も掲載する。）
 
 # dotfiles
 
@@ -81,7 +81,7 @@ ganariyaが使っているツールをまとめていきます。
 # 環境
 
 - nodejs (nodebrew)
-- python (pyenv使ってたけど次の環境ではおそらく変える)
+- python (pyenv 使ってたけど次の環境ではおそらく変える)
 - go
 - mactex
 
@@ -91,7 +91,7 @@ ganariyaが使っているツールをまとめていきます。
 - tmux
 - tmuxinator
 - gtop (パフォーマンス)
-- mps (YouTubeの再生)
+- mps (YouTube の再生)
 - exa
 - fish
 - gh
