@@ -2,7 +2,7 @@
 title: "執筆環境にtextlintを追加して読みやすい文章を書く"
 emoji: "📚"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ['latex', 'textlint', 'github_actions']
+topics: ['latex', 'textlint', 'githubactions']
 published: false
 ---
 
@@ -178,9 +178,22 @@ https://github.com/Ganariya/zenn-ganariya
 
 しかし、とある問題が発生しました。
 これまで私は textlint を入れておらず、新しく textlint を追加した結果、過去の記事で大量に修正箇所が出るようになりました。
-加えて、`zenn-ganariya` リポジトリには main ブランチの protection rule を設定しており、 textlint(ReviewDog) が通らないと main にマージすることができません。
+加えて、`zenn-ganariya` リポジトリには main ブランチの protection rule を設定しています。
+そのため、textlint(ReviewDog) が通らないと main にマージできません。
 
-その結果、新しく記事を書いてプルリクエストを出したとしても、過去の記事で lint error が出てマージすることができなくなりました。
+その結果、新しく記事を書いてプルリクエストを出したとしても、過去の記事で lint error が出てマージできない状態になりました。
 
+そこでブランチ名と記事を一緒にし、ブランチ名のみ lint をかけるようにしたかったのですが、うまくいきませんでした。
+もう少し調べて、なんとかブランチ名のみ lint をかけられるようにしたいです。
 
+# 参考文献
 
+https://zenn.dev/serima/articles/4dac7baf0b9377b0b58b
+
+https://zenn.dev/yuta28/articles/blog-lint-ci-reviewdog
+
+https://zenn.dev/ks6088ts/articles/20210315-zenn-get-started
+
+https://qiita.com/kn1cht/items/948a051cb374de13f9a7
+
+https://poyo.hatenablog.jp/entry/2020/12/05/110000
