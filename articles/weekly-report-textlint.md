@@ -3,7 +3,7 @@ title: "執筆環境にtextlintを追加して読みやすい文章を書く"
 emoji: "📚"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['latex', 'textlint', 'githubactions']
-published: false
+published: true
 ---
 
 # はじめに
