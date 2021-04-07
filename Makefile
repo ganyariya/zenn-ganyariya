@@ -10,7 +10,7 @@ help:
 article: ## SLUG option
 	npx zenn new:article --slug $(SLUG)
 
-.PHONY: preview
+.PHONY: prev iew
 preview: ## PORT option
 	npx zenn preview -p $(PORT) &
 
