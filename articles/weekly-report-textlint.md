@@ -119,7 +119,6 @@ fix-lint:
 
 https://zenn.dev/yuta28/articles/blog-lint-ci-reviewdog
 
-
 ```yaml
 name: reviewdog
 
@@ -169,4 +168,9 @@ jobs:
           SLACK_USERNAME: weekly-textlint
           SLACK_ICON_EMOJI: ":bell:"
 ```
+
+# Zennの執筆環境に lint を追加する
+
+同様に Zenn の執筆環境にも
+flaksfalsk;dfflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkflaksfalsk;dfasj;fsdflkajklsajfjlkasj;fsdflkajklsajfjlk
 
