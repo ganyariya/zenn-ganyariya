@@ -8,19 +8,19 @@ published: true
 
 # はじめに
 
-最近Macがいい感じに壊れたので、クリーンインストールしました。
+最近 Mac がいい感じに壊れたので、クリーンインストールしました。
 このとき、自分の [dotfiles](https://github.com/Ganariya/dotfiles)を利用しました。
 
-その後、AppStoreにしかないアプリを手動でインストールしました。
-brewにないものは手動しかないと思っていましたが、CLIでAppStoreのアプリをインストールできるものがあったので紹介します。
+その後、AppStore にしかないアプリを手動でインストールしました。
+brew にないものは手動しかないと思っていましたが、CLI で AppStore のアプリをインストールできるものがあったので紹介します。
 
 # mas
 
-[mas](https://github.com/mas-cli/mas)CLIはAppStoreのアプリを一括でインストールできます。
-使い方はREADMEにすべて書いてあります。
-使いづらい点としては、インストールするために`ID`を検索しないといけない点ですね...
+[mas](https://github.com/mas-cli/mas)CLI は AppStore のアプリを一括でインストールできます。
+使い方は README にすべて書いてあります。
+使いづらい点としては、インストールするために `ID` を検索しないといけない点ですね..。
 
-dotfilesでインストールを自動化しています。
+dotfiles でインストールを自動化しています。
 
 ```bash:install.sh
 stores=(
@@ -43,8 +43,4 @@ for store in "${stores[@]}"; do
 done
 ```
 
-`mas install ID`でAppStoreのアプリがインストールできて嬉しいですね。
-
-
-
-
+`mas install ID`で AppStore のアプリがインストールできて嬉しいですね。

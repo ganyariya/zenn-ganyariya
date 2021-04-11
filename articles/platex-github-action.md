@@ -8,10 +8,10 @@ published: true
 
 # はじめに
 
-GitHub ActionsでTeXファイルをコンパイルするActionを作成しました。
+GitHub Actions で TeX ファイルをコンパイルする Action を作成しました。
 [tsukuba-mas/platex-action](https://github.com/tsukuba-mas/platex-action)
 
-TeXファイルがあるリポジトリで`platex-action`を指定すると、PDFファイルをコンパイルしてくれます。
+TeX ファイルがあるリポジトリで `platex-action` を指定すると、PDF ファイルをコンパイルしてくれます。
 
 # platex-action
 
@@ -25,16 +25,16 @@ TeXファイルがあるリポジトリで`platex-action`を指定すると、PD
 
 ## Dockerfile
 
-GitHub Actionsでは、ActionのベースにDockerfileを指定できます。
+GitHub Actions では、Action のベースに Dockerfile を指定できます。
 
-Dockerfileを作成かつ指定すると、Actions実行時にこのDockerfileをビルドして、コンテナを実行します。
+Dockerfile を作成かつ指定すると、Actions 実行時にこの Dockerfile をビルドして、コンテナを実行します。
 
-Dockerfileは主に`コンテナがシェルスクリプトを実行するための環境構築`を担当します。
+Dockerfile は主に `コンテナがシェルスクリプトを実行するための環境構築` を担当します。
 
-たとえば、今回は`aruneko/texlive:latest`というイメージをベースにします。
-そして、コンテナ実行時に必要なファイルを用意するために、COPYコマンドを用いて作成するイメージの中に入れます。（入れたファイルは、イメージからコンテナが生成されたときに、エントリーポイントであるシェルスクリプト内で利用されます。）
+たとえば、今回は `aruneko/texlive:latest` というイメージをベースにします。
+そして、コンテナ実行時に必要なファイルを用意するために、COPY コマンドを用いて作成するイメージの中に入れます。（入れたファイルは、イメージからコンテナが生成されたときに、エントリーポイントであるシェルスクリプト内で利用されます。）
 
-あとはENTRYPOINTで実行されるシェルスクリプトを指定しておきます。
+あとは ENTRYPOINT で実行されるシェルスクリプトを指定しておきます。
 
 ```dockerfile
 FROM aruneko/texlive:latest
@@ -44,19 +44,20 @@ RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT [ "/entrypoint.sh" ]
 ```
 
-GitHub Actions実行時に、Dockerfileからイメージがビルドされ、そのイメージからコンテナが作成されます。
+GitHub Actions 実行時に、Dockerfile からイメージがビルドされ、そのイメージからコンテナが作成されます。
 そして、`/entrypoint.sh`が実行されます。
 このとき、`entrypoint.sh`はコンテナのトップディレクトリにあります。
-なぜならば、COPYで`/`に配置しているためです。
+なぜならば、COPY で `/` に配置しているためです。
 
-しかし、コンテナのワークディレクトリ・カレントディレクトリは**ルートディレクトリではありません。**
-たとえば、先に`actions/checkout@v2`が実行された場合、`/github/workspace`にチェックアウトしたファイルが展開され、カレントディレクトリも`/github/workspace`になっています。
+しかし、コンテナのワークディレクトリ・カレントディレクトリは**ルートディレクトリではありません**。
+たとえば、 `actions/checkout@v2` が実行された場合、`/github/workspace`にチェックアウトしたファイルが展開されます。
+そして、カレントディレクトリも `/github/workspace` になっています。
 
-コンテナ実行時のカレントディレクトリは、その他のActionsや`WORKDIR`に依存することに注意してください。
+コンテナ実行時のカレントディレクトリは、その他の Actions や `WORKDIR` に対して依存することに注意してください。
 
 ## action.yml
 
-action.ymlは、GitHub ActionsのActionの設定に必要なファイルです。
+action.yml は、GitHub Actions の Action の設定に必要なファイルです。
 今回は以下のように記述しています。
 
 ```yaml
@@ -73,12 +74,12 @@ runs:
   image: "Dockerfile"
 ```
 
-特徴的なのは`inputs`です。
-`inputs`は、Actionを利用したい側のリポジトリにおいて自由に変数を設定できるようにするためのものです。
+特徴的なのは `inputs` です。
+`inputs`は、Action を利用したい側のリポジトリにおいて自由に変数を設定できるようにするためのものです。
 
-たとえば、`hoge`というリポジトリにおいて、コンパイルしたいTeXファイルが`thesis.pdf`だった場合を考えます。
+たとえば、`hoge`というリポジトリにおいて、コンパイルしたい TeX ファイルが `thesis.pdf` だった場合を考えます。
 このとき、`hoge/.github/workflows/main.yml`などで以下のように設定すればよいです。
-こうすると、利用するhoge側から、自由に引数を変えることができます。
+こうすると、利用する hoge 側から、自由に引数を変えることができます。
 
 ```yaml
       - name: Compile Tex File
@@ -88,22 +89,23 @@ runs:
           LATEX_FILE_NAME: "thesis.tex"
 ```
 
-そのためには、Action側でこの引数を利用する必要があります。（当然ですが、固定した文字列を利用すると、そもそもユーザは自由に引数の中身を変更できません。）
+そのためには、Action 側でこの引数を利用する必要があります。（当然ですが、固定した文字列を利用すると、そもそもユーザは自由に引数の中身を変更できません。）
 よって、`inputs`に引数を設定します。
-この引数は`Dockerfile`で指定した`entrypoint.sh`などのシェルスクリプトのなかで、`$INPUT_LATEX_FILE_NAME`のように、`INPUT`を付け足すことで利用できます。
+この引数は `Dockerfile` で指定した `entrypoint.sh` などのシェルスクリプトのなかで、`$INPUT_LATEX_FILE_NAME`のように、`INPUT`を付け足すことで利用できます。
 
 ## shell script
 
 シェルスクリプトを用いて、コンテナ内で実行したいコマンドを実行します。
-すでにDockerfileによって環境は構築されているため、実行したいコマンドを記述するのみです。
+すでに Dockerfile によって環境は構築されているため、実行したいコマンドを記述するのみです。
 
-`cp /.latexmkrc .latexmkrc`は、Dockerfile作成時にコピーしておいた.latexmkrcファイルをカレントディレクトリに再コピーしています。
-理由としては、`.latexmkrc`をイメージビルド時にあるディレクトリにおいていたとしても、他のActionを先に実行するとカレントディレクトリが変わることがあります。（おそらくcheckout actionなどではディレクトリを設定できます。）
+`cp /.latexmkrc .latexmkrc`は、Dockerfile 作成時にコピーしておいた.latexmkrc ファイルをカレントディレクトリに再コピーしています。
+理由としては、`.latexmkrc`をイメージビルド時にあるディレクトリへおいていたとしても、他の Action を先に実行するとカレントディレクトリ自体が変わってしまうケースが存在します。
+（おそらく checkout action などではディレクトリを設定できます。）
 
-そのため、とりあえずイメージビルド時はルートにおいておいて、スクリプト実行時にカレントディレクトリに持ってくるようにしています。
+そのため、とりあえずイメージビルド時はルートにおいておいて、スクリプト実行時にカレントディレクトリへ持ってくるようにしています。
 
-`.latexmkrc`をわざわざ持ってきている理由としては、利用者側のリポジトリに`.latexmkrc`ファイルが用意されていないことがあるためです。
-そのため、もし利用者側のリポジトリになければ、デフォルトの`.latexmkrc`として、Actionのリポジトリの`.latexmkrc`を提供しています。
+`.latexmkrc`をわざわざ持ってきている理由としては、利用者側のリポジトリに `.latexmkrc` ファイルが用意されていないことがあるためです。
+そのため、もし利用者側のリポジトリになければ、デフォルトの `.latexmkrc` として Action のリポジトリの `.latexmkrc` を提供しています。
 
 ```bash
 #!/bin/bash
@@ -119,23 +121,23 @@ fi
 latexmk $INPUT_LATEX_FILE_NAME
 ```
 
-`INPUT_LATEX_FILE_NAME`でコンパイルするTeXファイルを与えます。
+`INPUT_LATEX_FILE_NAME`でコンパイルする TeX ファイルを与えます。
 
 
 # PDFのアップロード
 
-上記の`platex-action`を用いると、TeXファイルをPDFファイルにコンパイルできます。
+上記の `platex-action` を用いると、TeX ファイルを PDF ファイルにコンパイルできます。
 しかし、このままではコンパイルしただけです。
-せっかく作成されたPDFファイルもそのままコンテナごと消去されてしまいます。
+せっかく作成された PDF ファイルもそのままコンテナごと消去されてしまいます。
 
-そこで、`actions/create-release`と`actions/upload-release-asset@v1`を利用します。
-create-releaseは、`actions/checkout@v2`のディレクトリ`/github/workspace`にあるファイルたちをZipファイルをリリースします。
+そこで、`actions/create-release`と `actions/upload-release-asset@v1` を利用します。
+create-release は、`actions/checkout@v2`のディレクトリ `/github/workspace` にあるファイルたちを Zip ファイルをリリースします。
 
 ![](https://storage.googleapis.com/zenn-user-upload/8b3x4bmouvocrwlhjf1cfvqkpcjn)
 
-そして、upload-release-assetを用いると特定のファイルのみをReleaseに作成できます。（上の画像の`main.pdf`.）
+そして、upload-release-asset を用いると特定のファイルのみを Release に作成できます。（上の画像の `main.pdf` .）
 
-これらは、下記のようなyamlファイルを`your-tex-repository/.github/workflows/tex.yaml`に書くことで、PDFのリリースまでを行うことができます。
+これらは、下記のような yaml ファイルを `your-tex-repository/.github/workflows/tex.yaml` に書くことで、PDF のリリースまでを行うことができます。
 
 ```yaml
 on:
@@ -183,14 +185,14 @@ jobs:
           asset_content_type: application/pdf
 ```
 
-`Create Release`の`with`でタグ名やリリース名、リリース文章のBodyなどをユーザが与えられます。
+`Create Release`の `with` でタグ名やリリース名、リリース文章の Body などをユーザが与えられます。
 また、`upload_url`では、`steps.create_release.outputs.upload_url`のように指定することで、`Create Release`コンテナの出力を再利用できます。
 
 # さいごに
 
-GitHub Actionsを用いてTeXファイルをコンパイルしてPDFを作成しました。
-また、ReleaseならびにUploadアクションを用いることで、そのPDFのアップロードも行いました。
+GitHub Actions を用いて TeX ファイルをコンパイルして PDF を作成しました。
+また、Release ならびに Upload アクションを用いることで、その PDF のアップロードも行いました。
 
-公式のActionと組み合わせると、簡単にアップロードできてうれしいですね。
+公式の Action と組み合わせると、簡単にアップロードできてうれしいですね。
 とても勉強になりました。
-もっともっとGitHub Actionsに慣れていきたいです。　
+もっと GitHub Actions に慣れていきたいです。

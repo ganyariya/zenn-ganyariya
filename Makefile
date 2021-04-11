@@ -19,6 +19,10 @@ preview: ## PORT option
 lint: ## L_FILE option
 	npx textlint $(L_FILE)
 
+.PHONY: fix-lint
+fix-lint: ## L_FILE option
+	npx textlint --fix $(L_FILE) 
+
 .PHONY: install
 install:
 	npm install

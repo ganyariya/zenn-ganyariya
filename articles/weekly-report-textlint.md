@@ -61,7 +61,7 @@ weekly-report は論文執筆環境であるため、ピリオドやカンマな
         "preset-ja-spacing": true,
         "preset-ja-technical-writing": {
             "ja-no-mixed-period": {
-                "periodMark": "．",
+                "periodMark": "。",
             },
             "max-kanji-continuous-len": false,
             "sentence-length": 100,

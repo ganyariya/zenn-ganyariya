@@ -15,12 +15,12 @@ published: true
 ## 論文リスト
 
 関連度・出てきた順にまとめている。
-まだきちんと内容自体は読んでない。(読もうね）
+まだきちんと内容自体は読んでないため、時間を見つけて読む。
 
 ### NEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNING
 
 強化学習でアーキテクチャ探索をしている。
-RNNで文字列を生成してそれを子供ネットワークとしどれくらいよいか計算して
+RNN で文字列を生成してそれを子供ネットワークとしどれくらいよいか計算して
 その精度を報酬として、生成方策を修正する。
 
 - https://www.youtube.com/watch?v=sROrvtXnT7Q
@@ -31,10 +31,10 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 
 ### Learning Transferable Architectures for Scalable Image Recognition
 
-上のNEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNINGが重すぎたので
-セルブロックごとに計算した
+上の NEURAL ARCHITECTURE SEARCH WITH REINFORCEMENT LEARNING が重すぎたので
+セルブロックごとに計算した。
 
-ただし、CNNといった、ある程度のDomain知識がひつようになっている
+ただし、CNN といった、ある程度の Domain 知識がひつようになっている。
 
 
 - https://qiita.com/cvusk/items/536862d57107b9c190e2
@@ -48,7 +48,7 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 
 大きいグラフ用意してそれのサブグラフを取り出して学習しているらしい。
 そのため、重みを共有しており、高速化が著しくできている
-（GPU１個で一日で終わるらしい）
+（GPU１個、一日で終わるらしい）
 
 - https://vimeo.com/312307145
 - https://www.slideshare.net/TaichiItoh/efficient-neural-architecture-searchvia-parameter-sharing
@@ -58,9 +58,9 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 ### DARTS: DIFFERENTIABLE ARCHITECTURE SEARCH
 
 アーキテクチャのノード間に複数の接続を用意して
-それぞれの接続がPooling, Convといった異なるOperationになっている。
+それぞれの接続が Pooling, Conv といった異なる Operation になっている。
 
-これらを少数で重みつけをして、アーキテクチャごと微分できるようにして、どのOperationを選択するか取捨選択できるようになっている。
+これらを少数で重みつけをして、アーキテクチャごと微分できるようにして、どの Operation を選択するか取捨選択できるようになっている。
 
 - https://www.slideshare.net/YutaKoreeda/darts-differentiable-architecture-search
 - https://www.slideshare.net/c-bata/darts-differentiable-architecture-search-at-205326748
@@ -70,9 +70,9 @@ RNNで文字列を生成してそれを子供ネットワークとしどれく�
 ### FBNet: Hardware-Aware Efficient ConvNet Designvia Differentiable Neural Architecture Search
 
 なんかモバイル向けだとネットワークに入力してから出力するまでの時間も重要らしいので
-それを生成に取り入れるようにしたらしい
+それを生成に取り入れた。
 
-もっと調べたほうが良さそう
+もっと調べたほうが良さそう。
 
 - https://youtu.be/PzALQZOy09c?t=3918
 - http://xpaperchallenge.org/cv/survey/cvpr2019_summaries/768/
