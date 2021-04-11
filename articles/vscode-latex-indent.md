@@ -1,9 +1,9 @@
 ---
-title: ""
+title: "Mac+VSCodeでLaTeX Workshopのフォーマットが動くようにする"
 emoji: "🎉"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
-published: false
+topics: ["latex", "vscode"]
+published: true
 ---
 
 # はじめに
@@ -12,7 +12,7 @@ published: false
 利用している拡張機能は `LaTeX Workshop` です。
 
 しかしファイルを保存しようとすると、毎回 `フォーマットに失敗しました` という旨のメッセージが表示されます。
-LaTeX Workshop の出力を見ても以下のログの通りであり、 `latexindent` まわりが原因で失敗している事がわかります。
+LaTeX Workshop の出力を見ても以下のログの通りであり、 `latexindent` まわりが原因で失敗していることがわかります。
 
 ```bash
 [09:14:54] Formatting with command /Users/ganariya/.vscode/extensions/james-yu.latex-workshop-8.16.1/scripts/latexindent -c,.//,__latexindent_temp.tex,-y=defaultIndent: '    '
@@ -54,4 +54,32 @@ cpan Log::Log4perl
 ```
 
 上記のコマンドは 2 つとも時間がかるため気長に待つことにします。
+しかし、cpan コマンドでエラーを出しました。
+そのため、参考記事通りに行ってみることにします。
+
+cpan と比べて cpanm はより高速かつ、他のモジュールに依存しないので導入しやすい特徴があるようです。
+
+```bash
+brew install perl
+brew install cpanm
+cpanm Log::Log4perl Log::Dispatch::File YAML::Tiny File::HomeDir Unicode::GCString
+```
+
+上記のコマンドを打った結果、 `latexindent` はうまく動きました。
+やはり先人の知恵を参考にすべきですね。
+
+しかし、VSCode の Workshop はいまだにエラーを出し続けます。
+
+```bash
+[10:09:50] Formatting with command /Users/ganariya/.vscode/extensions/james-yu.latex-workshop-8.16.1/scripts/latexindent -c,.//,__latexindent_temp.tex,-y=defaultIndent: '    '
+[10:09:51] Formatting failed with exit code 127
+[10:09:51] stderr: docker: Error response from daemon: OCI runtime create failed: container_linux.go:370: starting container process caused: exec: "latexindent": executable file not found in $PATH: unknown.
+```
+
+そこで、拡張機能自体の設定を見直しました。
+これまでの設定では、 Docker イメージ `korosuke613/ubuntu-texlive-ja` を利用していました。
+しかし、このイメージではおそらく `latexindent` が設定されていなかったため、 format に失敗していました。
+
+そのため、 `Latex-workshop > Docker > Enabled` のチェックマークを外すことで、
+Mac 自身にインストールされている `latexindent` を利用できました。
 
