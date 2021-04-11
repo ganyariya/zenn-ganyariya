@@ -16,5 +16,9 @@
                 "after": true
             }
         },
+        "ja-unnatural-alphabet": true,
+        "ja-hiragana-keishikimeishi": true,
+        "ja-hiragana-fukushi": true,
+        "ja-hiragana-hojodoushi": true
     }
 }
