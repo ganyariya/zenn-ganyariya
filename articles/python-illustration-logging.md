@@ -10,8 +10,8 @@ published: false
 
 ## 対象読者
 
-- [Logging HOWTO](https://docs.python.org/ja/3/howto/logging.html)の初級編は読んでいる方
-- [Logging HOWTO](https://docs.python.org/ja/3/howto/logging.html)の上級編に目を軽く通した方
+- [Logging HOWTO](https://docs.python.org/ja/3/howto/logging.html)の初級編は読んでいるほう
+- [Logging HOWTO](https://docs.python.org/ja/3/howto/logging.html)の上級編に目を軽く通したほう
 
 ## 内容
 
