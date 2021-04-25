@@ -3,7 +3,7 @@ title: "Mac+fishでpyenvのpathを通す"
 emoji: "📌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['fish', 'pyenv', 'python']
-published: false
+published: true
 ---
 
 # はじめに
