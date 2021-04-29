@@ -133,6 +133,14 @@ echo A
 
 ## N行に複数の変数
 
+https://nim-lang.org/docs/sequtils.html#mapIt.t%2Ctyped%2Cuntyped
+
+`template mapIt(s: typed; op: untyped): untyped`
+
+`mapIt`は、型がコンパイル時に明示的である s の要素それぞれに対して op の操作をしたものを返します。
+`let a = (0..<10).toSeq.mapIt(it*2)`は、`@[0, ..., 9]`の要素それぞれに対して２倍の操作をする proc が適用されています。
+ここで、`it` は各要素が代入されて与えられます。
+
 ```nim
 import sequtils, strutils, algorithm
 
