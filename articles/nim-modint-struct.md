@@ -3,7 +3,7 @@ title: "Nim で ModInt 構造体を作る"
 emoji: "📑"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['nim', 'modint', '競技プログラミング']
-published: false
+published: true
 ---
 
 # はじめに
