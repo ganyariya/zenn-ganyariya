@@ -68,6 +68,25 @@ var
 echo &"{x} {y} {z}"
 ```
 
+[@jiro4989](https://zenn.dev/jiro4989) さんに、複数の型の変数の受け取り方をコメント欄で教えていただきました。
+`strscans` モジュールを用いると複数の型の変数に代入できます。
+C / C++ の scanf のように書けて便利です。
+
+```nim
+import strscans, strformat
+
+# 4 hello 32.3
+var
+  x: int
+  y: string
+  z: float
+
+discard stdin.readLine.scanf("$i $w $f", x, y, z)
+
+echo &"{x} {y} {z}"
+```
+
+
 ## 1行に配列
 
 ```nim
