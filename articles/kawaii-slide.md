@@ -3,7 +3,7 @@ title: "かわいいスライドでプレゼンしたい"
 emoji: "🎃"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["slide", "プレゼンテーション", "shell"]
-published: false
+published: true
 ---
 
 # はじめに
