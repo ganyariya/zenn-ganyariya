@@ -57,7 +57,9 @@ demsato さんが、さまざまなコンテンツで利用できるアイコン
 もともとは動画用を想定されているため、 AviUtl で利用できる png の連番形式になっています。
 
 https://twitter.com/UDMP/status/1397080033974358018
+
 https://seiga.nicovideo.jp/seiga/im10751275
+
 https://demsato.booth.pm/items/2993967
 
 スライドで利用できる形式は、 gif 画像であるためこのままでは利用できません。
