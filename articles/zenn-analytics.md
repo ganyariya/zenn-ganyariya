@@ -3,7 +3,7 @@ title: "Zenn の Google Analytics の仕組みに思いを馳せる"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["googleanalytics"]
-published: false
+published: true
 ---
 
 # はじめに
