@@ -21,5 +21,11 @@
         "ja-hiragana-fukushi": true,
         "ja-hiragana-hojodoushi": true,
         "no-mixed-zenkaku-and-hankaku-alphabet": true
+    },
+    "filters": {
+        "comments": {
+            "enablingComment": "textlint-enable",
+            "disablingComment": "textlint-disable"
+        }
     }
 }
