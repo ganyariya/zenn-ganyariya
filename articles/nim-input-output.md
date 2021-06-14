@@ -258,6 +258,23 @@ let a = @[1, 2, 3]
 echo a.join "\n"
 ```
 
+## 浮動小数点の出力
+
+https://qiita.com/momeemt/items/000d1f6c384f4f00e103
+
+strformat を使うと Python の `f` 文字列のように出力できます。
+競技プログラミングでは、浮動小数点の桁数を要求することが多いです。
+そのため、`fmt`を用いて `{変数:.10f}` のようにすることで桁数を固定できます。
+
+
+```nim
+import strformat
+
+let a = 2525.0 / 2020
+
+echo fmt"{a:.20f}"
+```
+
 # リンク
 
 - [Syntax of Nim](https://gist.github.com/miyakogi/b1df00c8bc99927d9d0d)
