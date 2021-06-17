@@ -26,4 +26,4 @@ fix-lint: ## L_FILE option
 .PHONY: install
 install:
 	npm install
-	npm audit fix
+	npm audit fix --force
