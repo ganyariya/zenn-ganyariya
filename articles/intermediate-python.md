@@ -9,11 +9,13 @@ published: true
 # はじめに
 
 ## 本記事の読者対象
+<!-- textlint-disable -->
 
-- Python の開発環境・ツールをさらに覚えたいほう
-- よりモダンに近い Python 環境が欲しいほう
+- Python の開発環境・ツールをさらに覚えたい方
+- よりモダンに近い Python 環境が欲しい方
 
-## 想定していないほう
+## 想定していない方
+<!-- textlint-enable -->
 
 - Python 自体がはじめての方
 - Python 上級者
