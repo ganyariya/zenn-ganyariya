@@ -68,7 +68,7 @@ mutlirow と multicolumn を理解するために、`booktabs` を用いてス�
 
 そこで、これらを**置き換える気持ちで multirow** を設定します。
 
-# multicolumn
+# multirow
 
 先程のテーブルでは、`X` と `Y` を同じグループであることを示すために複数回書いてしまいました。
 そこで、これらを `multirow` で**置き換え**ます。
