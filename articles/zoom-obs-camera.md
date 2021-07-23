@@ -1,5 +1,5 @@
 ---
-title: "世界で2番目にお手軽なバーチャルアニメZoomビデオ"
+title: "世界で2番目にお手軽なバーチャルアニメZoomビデオ配信"
 emoji: "🎃"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ['zoom', 'obs']
