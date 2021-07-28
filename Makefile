@@ -10,8 +10,9 @@ help:
 article: ## SLUG option
 	npx zenn new:article --slug $(SLUG)
 	git checkout -b $(SLUG)
+	open http://localhost:$(PORT)
 
-.PHONY: prev iew
+.PHONY: preview
 preview: ## PORT option
 	npx zenn preview -p $(PORT) &
 
