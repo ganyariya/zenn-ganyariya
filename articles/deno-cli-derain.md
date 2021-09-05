@@ -3,7 +3,7 @@ title: "CLI を作る中でわかった deno のうれしさ"
 emoji: "✨"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["deno", "CLI"]
-published: false
+published: true
 ---
 
 # はじめに
