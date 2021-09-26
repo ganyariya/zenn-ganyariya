@@ -13,10 +13,13 @@ published: true
 
 たとえば私は現在、機械学習のコードを Python3.9 で通常の py ファイルで書いています。
 そして、そのリポジトリを Colaboratory 上で clone し、通常の py ファイルのまま学習しています。
-（`!python learn.py` のようにコマンドで実行します。実際にはタスクランナーとして make を噛ませています。）
+これによって、Colaboratory の GPU の恩恵に預かれます。
 
 typing の恩恵をより受けるためにも Colaboratory 上でも 3.9 を実行できるようにします。
 （`Final` や `list[str]` と py ファイルに書いているため、そもそも 3.7 だと動きません。）
+
+ただし、以下を実行しても **jupyter notebook 自体のランタイムが 3.9 になるわけではありません。**
+jupyter notebook のランタイムはかわらず 3.7 のままです。
 
 # 3.9 に対応させる
 
@@ -50,6 +53,8 @@ typing の恩恵をより受けるためにも Colaboratory 上でも 3.9 を実
 そのため、シンボリックリンクを新たに貼り直してあげればいいです（`!sudo ln -sf /usr/bin/python /usr/local/bin/python`）。
 これで `/usr/local/bin/python -> /usr/bin/python -> /usr/bin/python3.9` となり、3.9 の準備完了です。
 
+あとは `!python main.py` などとして py ファイルを実行すればよいです。
+
 # private リポジトリを Clone して Colaboratory で実行する
 
 おまけコーナーです。
@@ -67,3 +72,6 @@ os.chdir(path)
 
 https://docs.github.com/ja/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
+# 参考にさせていただいた記事
+
+https://qiita.com/checche/items/396309459833e6ea598c
