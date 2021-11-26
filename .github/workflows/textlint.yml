@@ -44,7 +44,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_USERNAME: weekly-textlint
+          SLACK_USERNAME: zenn-textlint
           SLACK_ICON_EMOJI: ":bell:"
           SLACK_TITLE: Lint Success
       - name: Slack Notification on Failure
@@ -52,7 +52,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_USERNAME: weekly-textlint
+          SLACK_USERNAME: zenn-textlint
           SLACK_ICON_EMOJI: ":bell:"
           SLACK_TITLE: Lint Failure
           SLACK_COLOR: danger
