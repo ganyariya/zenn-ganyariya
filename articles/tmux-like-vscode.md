@@ -5,6 +5,17 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["tmux", "vscode"]
 published: true
 ---
+
+# 更新
+
+#### 2021/12/10 
+
+- サイドバーに関する tmux っぽい操作を追加しました
+  - `sideBarFocus` で表現できます
+- `!terminalFocus` を `editorFocus` に変更しました。
+- エディタ操作についていくつか操作を追加しました。
+
+
 # はじめに
 
 この記事は Visual Studio Code Advent Calendar 2021 の 10 日目の記事です。
@@ -52,11 +63,14 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
 
 ```json
 [
+    // ------------------------------------------------------------------
     // ------------------------------ Tmux ------------------------------
+    // ------------------------------------------------------------------
+    // ------------------------------ Tmux Editor ------------------------------
     {
         "key": "ctrl+a h",
         "command": "workbench.action.focusLeftGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+k cmd+left",
@@ -65,7 +79,7 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
     {
         "key": "ctrl+a l",
         "command": "workbench.action.focusRightGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+k cmd+right",
@@ -74,7 +88,7 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
     {
         "key": "ctrl+a j",
         "command": "workbench.action.focusBelowGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+k cmd+down",
@@ -83,7 +97,7 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
     {
         "key": "ctrl+a k",
         "command": "workbench.action.focusAboveGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+k cmd+up",
@@ -92,7 +106,7 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
     {
         "key": "ctrl+a shift+\\",
         "command": "workbench.action.splitEditor",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+\\",
@@ -101,50 +115,61 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
     {
         "key": "ctrl+a -",
         "command": "workbench.action.splitEditorOrthogonal",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "cmd+k cmd+\\",
         "command": "-workbench.action.splitEditorOrthogonal"
     }, // Split Horizon
     {
-        "key": "alt+cmd+right",
-        "command": "-workbench.action.nextEditor"
-    },
-    {
         "key": "ctrl+a shift+l",
         "command": "workbench.action.increaseViewWidth",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "ctrl+a shift+m",
         "command": "workbench.action.decreaseViewWidth",
-        "when": "!terminalFocus"
-    }, // group increase or decrease
+        "when": "editorFocus"
+    }, // group width increase or decrease
+    {
+        "key": "ctrl+a shift+j",
+        "command": "workbench.action.increaseViewHeight",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+a shift+k",
+        "command": "workbench.action.decreaseViewHeight",
+        "when": "editorFocus"
+    }, // group height increase or decrease
     {
         "key": "ctrl+a x",
         "command": "workbench.action.closeActiveEditor",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+a shift+x",
+        "command": "workbench.action.closeEditorsAndGroup",
+        "when": "editorFocus"
     }, // delete Editor
     {
         "key": "ctrl+a shift+[",
         "command": "workbench.action.moveEditorToPreviousGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "ctrl+a shift+]",
         "command": "workbench.action.moveEditorToNextGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     }, // current editor to (next|previous) group
     {
         "key": "ctrl+a n",
         "command": "workbench.action.focusNextGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "ctrl+a p",
         "command": "workbench.action.focusPreviousGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     }, // current editor to (next|previous) group
     {
         "key": "ctrl+a [",
@@ -160,6 +185,12 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
         "command": "workbench.view.search",
         "when": "workbench.view.search.active && neverMatch =~ /doesNotMatch/"
     }, // global serach
+    {
+        "key": "ctrl+a z",
+        "command": "workbench.action.maximizeEditor",
+        "when": "editorFocus"
+    }, // maximizeEditor
+    // ------------------------------ Tmux Terminal ------------------------------
     {
         "key": "ctrl+a shift+\\",
         "command": "workbench.action.terminal.split",
@@ -204,7 +235,37 @@ tmux っぽくいじる前に以下の設定を入れておくと幸せになり
         "key": "ctrl+a x",
         "command": "workbench.action.terminal.kill",
         "when": "terminalFocus"
-    }, // focus terminal to next different pane
+    }, // delete terminal
+    {
+        "key": "ctrl+a shift+k",
+        "command": "workbench.action.terminal.resizePaneUp",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+a shift+j",
+        "command": "workbench.action.terminal.resizePaneDown",
+        "when": "terminalFocus"
+    }, // change terminalSize
+    {
+        "key": "ctrl+a j",
+        "command": "workbench.action.nextSideBarView",
+        "when": "sideBarFocus"
+    },
+    {
+        "key": "ctrl+a n",
+        "command": "workbench.action.nextSideBarView",
+        "when": "sideBarFocus"
+    },
+    {
+        "key": "ctrl+a k",
+        "command": "workbench.action.previousSideBarView",
+        "when": "sideBarFocus"
+    },
+    {
+        "key": "ctrl+a p",
+        "command": "workbench.action.previousSideBarView",
+        "when": "sideBarFocus"
+    },
 ]
 ```
 
@@ -236,15 +297,15 @@ ganyariya は tmux の prefix を `ctrl + a` にしている勢です。
 ## ターミナル操作
 
 ターミナルに関しても tmux 操作を設定します。
-このとき、設定ファイルでは以下のように tmux / editor を分けて設定します。
+このとき、設定ファイルでは以下のように tmux / editor / sideBar を分けて設定します。
 ターミナルを操作しているときは `terminalFocus` 側が実行されます。
-そうでないとき（エディタを操作しているとき）は `!terminalFocus` 側が実行されます。
+エディタを操作しているときは `editorFocus` が実行されます。
 
 ```json
     {
         "key": "ctrl+a h",
         "command": "workbench.action.focusLeftGroup",
-        "when": "!terminalFocus"
+        "when": "editorFocus"
     },
     {
         "key": "ctrl+a h",
@@ -253,11 +314,14 @@ ganyariya は tmux の prefix を `ctrl + a` にしている勢です。
     }
 ```
 
-ターミナル側では、ウィンドウグループのように上下には端末を切れないため、
-かなり少ない操作数しか用意していません。
+ターミナル側では、ウィンドウグループのように上下には端末を切れないため、かなり少ない操作数しか用意していません。
 それでもこれだけあればマウスなしですべて操作できそうな感じがでてとても精神上良いです。
 
 ![vscode-tmux-terminal](https://i.gyazo.com/2209c384d861d3c010bc152587470008.gif)
+
+## サイドバー操作
+
+サイドバーについても `ctrl+a n`, `ctrl+a p` などで次のサイドバーの項目へ移動できるようにしています。
 
 # 最後に
 
