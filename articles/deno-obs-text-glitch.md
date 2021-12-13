@@ -57,7 +57,9 @@ Deno では、直接 `jsx`, `tsx` 拡張子を利用できます。
 便利です。
 
 https://deno.com/deploy/docs/using-jsx
+
 https://deno-ja.vercel.app/manual@v1.8.3/typescript/overview
+
 https://hashrock.hatenablog.com/entry/2019/10/09/235615
 
 ただ、実際に React を直接設定するのは大変なので、 Deno における Next.js の立ち位置である Aleph.js を使うと良いです。
