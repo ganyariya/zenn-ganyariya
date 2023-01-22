@@ -10,7 +10,8 @@ help:
 article: ## SLUG option
 	npx zenn new:article --slug $(SLUG)
 	git checkout -b $(SLUG)
-	open http://localhost:$(PORT)
+	open http://localhost:$(PORT) || true
+	echo "http://localhost:/$(PORT)"
 
 .PHONY: preview
 preview: ## PORT option
