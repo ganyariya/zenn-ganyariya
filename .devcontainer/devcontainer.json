@@ -1,0 +1,21 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+	"name": "Untitled Node.js project",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"portsAttributes": {
+		"8100": {
+			"label": "Application"
+		}
+	},
+	"remoteUser": "node",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"taichi.vscode-textlint",
+				"yzhang.markdown-all-in-one"
+			]
+		}
+	}
+}
