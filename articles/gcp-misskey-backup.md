@@ -3,7 +3,7 @@ title: "GCPで Misskey の PostgresDB とメディアファイルをバックア
 emoji: "😎"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["gcp", "misskey"]
-published: false
+published: true
 ---
 
 # はじめに
