@@ -298,4 +298,238 @@ Socket API を利用すると、同一または異なるプロセスが互いの
 プログラムは Socket API を利用して、 socket に対して `read/write` を行うだけでよいです。
 あとは socket API が内部でいい感じにファイル・ファイルディスクリプタを用意して、通信相手とよしなにやり取りしてくれます。
 
+# Go におけるソケット通信の実装
 
+これまでのソケット通信の概要を踏まえて、それでは Go 言語において以下の場合のソケット通信を実装します。
+
+- クライアント: 多
+- サーバ: 1
+
+## リポジトリ
+
+https://github.com/ganyariya/playground/tree/main/linux-tcpip/go_socket
+
+`cmd/server` `cmd/client` がそれぞれの実装です。
+また、`pkg/info` が情報を表示出すための utility 関数 package です。
+
+以下のコマンドでサーバ・クライアントプログラムを起動できます。
+
+```shell
+go run ./cmd/server
+
+# client 1
+go run ./cmd/client
+# 別 terminal client 2
+go run ./cmd/client
+```
+
+## サーバ側の実装
+
+https://github.com/ganyariya/playground/blob/main/linux-tcpip/go_socket/cmd/server/main.go
+
+はじめに、 `net.ResolveTCPAddr` で Socket 通信における「サーバ側（待受）」アドレスを指定します。
+今回の場合は、 `tcp` ならびに `localhost:12345` です。
+これで、`サーバが tcp プロトコルにおいて localhost:12345 で待ち受ける` ことを表すアドレス構造体 `TCPAddr` を作成できます。
+
+```go
+tcpAddress, _ := net.ResolveTCPAddr(TCP_PROTOCOL, SERVER_TCP_ADDRESS)
+```
+
+`ResolveTCPAddr` が返す変数は `TCPAddr` であり、`IP` `Port` をメンバ変数として持ちます。
+IP Address + Port が socket 通信におけるアドレスでしたね。
+
+https://github.com/golang/go/blob/5f345e8eb995409fec5e1abf231031613885f2ae/src/net/sockaddr_posix.go#L15
+
+https://github.com/golang/go/blob/aa4d5e739f32397969fd5c33cbc95d316686039f/src/net/tcpsock.go#L21
+
+続いて、 `net.ListenTCP` で `tcpAddress` のアドレスに関するサーバ待受ソケットを作成します。
+このとき、内部では通信用のファイルが作成され、そのファイルディスクリプタも払い出されます。
+
+```go
+listener, _ := net.ListenTCP(TCP_PROTOCOL, tcpAddress)
+```
+
+`net.ListenTCP` の返り値は `*net.TCPListener` 構造体です。
+`fd *netFD` という socket に相当するものを所持しています。
+
+https://github.com/golang/go/blob/aa4d5e739f32397969fd5c33cbc95d316686039f/src/net/tcpsock.go#L279
+
+`net.ListenTCP()` の内部では、 `internalSocket` 関数が実行されます。
+`internalSocket` では内部的に socket system call が呼ばれ、ファイル・ファイルディスクリプタが作成されます。 
+そして、 `*net.netFD` という Go における socket が生成され、上記のファイルディスクリプタを内部に所持（ラップ）します。
+
+https://github.com/golang/go/blob/2ca4104f0519027c55266d48b47ea16ee4da6915/src/net/fd_posix.go#L17
+
+`*net.netFD` の初期化時には、 `sysfd` (通信用ファイルのファイルディスクリプタ)が `*net.netFD` の内部に格納されていることが `newFD()` の実装で分かるかと思います。
+
+https://github.com/golang/go/blob/2ca4104f0519027c55266d48b47ea16ee4da6915/src/net/fd_unix.go#L26
+
+そのため、 `*net.netFD` がファイルディスクリプタならびに `tcpAddr`を内部で所持し、 listener がさらに `*net.netFD` を内部で所持するという形式になっています。
+
+`listener` を通してソケット通信をしようとすると、 `fd: *net.netFD` などは別 package & private field なので、アクセスできません。
+そのため、ソケット通信をする際は細かい内部の実装・メンバ変数を気にすることなく、 `listener.Accept()` などの抽象化されたメソッドを呼び出すだけで良くなります。
+
+サーバ待受処理の最後として、 `listener.Accept()` で接続を待ち受けます。
+そして、クライアント X から接続が来るまでは `listener.Accept()` でずっと待っています。
+
+実際にクライアント X から接続が来ると、クライアント X 通信用に socket (*net.netFD) を作成し、 `handler` スレッドにクライアント X の通信を委ねます。
+このとき、すでに `clientConn` が内部に持っている `*net.netFD` の `raddr` にはクライアント X のアドレスが記載されています。
+
+```go
+	for {
+		// 実際に接続を待つ
+		// クライアントから接続が来たら、そのクライアント用に新しいソケットを作成する
+		clientConn, _ := listener.Accept()
+		go handler(clientConn)
+	}
+```
+
+handler には実際にクライアント X と TCP 通信する処理を記載します。
+`conn.Read` でクライアント X から通信が来るまで待機します。
+
+続いて、`conn` の `fd *net.netFD` が指すファイルディスクリプタのファイルに通信データが来たら、そのデータを `conn.Read()` で読み取ります。
+読み取ったデータはそのままクライアントに `conn.Write` でお繰り返します。
+
+```go
+/*
+クライアント X と実際に通信をする
+conn = listener.fd をコピーして作成された、特定のクライアント X 用の socket connection
+*/
+func handler(conn net.Conn) {
+	connInfo := info.GetNetConnectionInfo(true, conn)
+	log.Println(connInfo)
+
+	defer conn.Close()
+
+	for {
+		request := make([]byte, 4096)
+
+		// クライアント X から通信が来るまで待機する
+		readLen, _ := conn.Read(request)
+
+		// クライアントが接続を切った
+		if readLen == 0 {
+			break
+		}
+
+		conn.Write([]byte("[From][Server] Hello! Your message is " + string(request)))
+		log.Printf("%s sent to client message: %s", connInfo, string(request))
+	}
+}
+```
+
+## クライアント
+
+https://github.com/ganyariya/playground/blob/main/linux-tcpip/go_socket/cmd/client/main.go
+
+サーバ側のアドレスを示す `serverTcpAddr` を作成し、そのサーバアドレスと通信するための socket を `net.DialTCP` で作成します。
+
+このとき、クライアント側のアドレス（`IP Address + Port`）はクライアントプログラムで指定していないことに注意してください。
+クライアントとしては、通信先のサーバのアドレスさえ分かればよいです。
+また、サーバ通信用のクライアントポートは `net.DialTCP` 時に割り当てられ、 `*net.netFD` 構造体に port が記載されます。
+
+```go
+	/*
+		通信先である Server の アドレス (IP Address + Port)
+	*/
+	serverTcpAddr, _ := net.ResolveTCPAddr(TCP_PROTOCOL, SERVER_TCP_ADDRESS)
+
+	/*
+		Server と通信するための Socket (conn) を作成する
+
+		Client 側の アドレス (IP Address + Port) は指定しなくていい = nil
+	*/
+	conn, _ := net.DialTCP(TCP_PROTOCOL, nil, serverTcpAddr)
+```
+
+あとは実際にサーバへ TCP 通信を投げます。
+
+```go
+	for {
+		var message string
+		fmt.Scanln(&message)
+
+		// サーバに送信
+		conn.Write([]byte(message))
+
+		// サーバからのレスポンスがくるまで待機
+		response := make([]byte, 1000_000)
+		readLen, _ := conn.Read(response)
+
+		if readLen == 0 {
+			break
+		}
+		log.Println(string(response))
+	}
+```
+
+## 動作例
+
+Server プロセスが 1 つ、 Client プロセスが 2 つの場合で実行してみます。
+先に Server を起動し、 Client 1, Client 2 を続いて起動します。
+その後、 Client 1 が先にメッセージを送り、続いて Client 2 もメッセージを送ります。
+
+```shell:server
+❯ go run ./cmd/server
+2023/05/16 10:13:44 [Server][Parent] *net.TCPListener Address: 127.0.0.1:12345, fd: 5
+2023/05/16 10:13:46 [Server][Child] pid:42856, fd:9, localAddress:127.0.0.1:12345, remoteAddress:127.0.0.1:60189
+2023/05/16 10:13:49 [Server][Child] pid:42856, fd:10, localAddress:127.0.0.1:12345, remoteAddress:127.0.0.1:60190
+2023/05/16 10:13:56 [Server][Child] pid:42856, fd:9, localAddress:127.0.0.1:12345, remoteAddress:127.0.0.1:60189 sent to client message: Hello!IamClient1
+2023/05/16 10:14:07 [Server][Child] pid:42856, fd:10, localAddress:127.0.0.1:12345, remoteAddress:127.0.0.1:60190 sent to client message: Oh!IamClient2...
+```
+
+server 親スレッドは `127.0.0.1:12345` で待ち受けており、サーバ待受ソケットのファイルディスクリプタは 5 です。
+続いて、 `client1` から接続要求が来て、サーバ待受ソケットがコピーされて `client1` 用の socket ならびに通信用スレッドが作成されます。
+`client1` 通信のサーバ socket (net.Conn, netFD) の内容が以下になっていることがわかります。
+
+- raddr = `127.0.0.1:60189`（client 1 の待受ポートが 60189）
+- laddr は親スレッドと同じ `127.0.0.01:12345`
+- `client1` 通信用のサーバファイルディスクリプタは `9`
+
+`client2` からも同様の接続要求が来て、`client2` 用に通信ソケットならびに通信スレッドを作成します。
+ここで、`client2` に割り振られた port は `60190` となっています。
+
+`client1` から `Hello!IamClient1` メッセージが来たときは、それを `127.0.0.1:60189` に返信しています。
+`client1` 通信用スレッドは、 `client1` 用 socket のファイルディスクリプタを監視しているため、 `60189` から来た通信データを読み取れるのですね。
+
+```shell:client1
+❯ go run ./cmd/client
+2023/05/16 10:13:46 [Client] pid:44705, fd:5, localAddress:127.0.0.1:60189, remoteAddress:127.0.0.1:12345
+Hello!IamClient1
+2023/05/16 10:13:56 [From][Server] Hello! Your message is Hello!IamClient1
+```
+
+client1 側の内容を見ると、 `60189` の port が割り振られており、 サーバ `12345` に接続していることがわかりますね。
+
+```shell:client2
+❯ go run ./cmd/client
+2023/05/16 10:13:49 [Client] pid:46808, fd:5, localAddress:127.0.0.1:60190, remoteAddress:127.0.0.1:12345
+Oh!IamClient2...
+2023/05/16 10:14:07 [From][Server] Hello! Your message is Oh!IamClient2...
+```
+
+# 最後に
+
+socket 通信がどのように行われているかを、以下について触れながら自分なりにまとめてみました。
+
+- ファイル
+- ファイルディスクリプタ
+- fork / pipe
+- socket
+- Go 実装
+
+より詳しくなれるように、今度は [`KLab` さんのプロトコル実装](https://drive.google.com/drive/folders/1k2vymbC3vUk5CTJbay4LLEdZ9HemIpZe)をやってみようと思います。
+
+# 参考記事
+
+https://www.amazon.co.jp/Linux%E3%81%A7%E5%8B%95%E3%81%8B%E3%81%97%E3%81%AA%E3%81%8C%E3%82%89%E5%AD%A6%E3%81%B6TCP-IP%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%E5%85%A5%E9%96%80-%E3%82%82%E3%81%BF%E3%81%98%E3%81%82%E3%82%81-ebook/dp/B085BG8CH5
+
+https://envader.plus/article/27
+
+https://www.ibm.com/docs/ja/i/7.2?topic=programming-how-sockets-work
+
+http://www.osssme.com/doc/funto45.html
+
+https://milestone-of-se.nesuke.com/sv-basic/linux-basic/fd-stdinout-pipe-redirect/
+
+https://xtech.nikkei.com/it/article/COLUMN/20071031/285990/
