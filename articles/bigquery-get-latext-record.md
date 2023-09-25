@@ -3,7 +3,7 @@ title: "BigQuery で最新のレコードを取得する"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["bigquery"]
-published: false
+published: true
 ---
 
 # はじめに
