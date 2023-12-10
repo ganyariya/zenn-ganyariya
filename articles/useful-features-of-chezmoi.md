@@ -14,7 +14,7 @@ published: true
 https://qiita.com/ganyariya/items/d9adffc6535dfca6784b
 https://github.com/ganyariya/dotfiles_old
 
-そのため、 dotfiles を `chezmoi` という dotfiles 管理ツールを利用して、ゼロから作り直すことにしました。
+そのため、 dotfiles を `chezmoi` という dotfiles 管理ツールを利用して、ゼロから dotfiles を作り直しました。
 この記事では dotfiles を chezmoi をもちいて置き換えるうえで、便利だなと思った機能についてまとめます。
 
 ## できあがった dotfiles
@@ -22,7 +22,7 @@ https://github.com/ganyariya/dotfiles_old
 https://github.com/ganyariya/dotfiles
 
 debian image における chezmoi apply の実行です。
-apt でインストールできる neovim が古く build で実行ファイルを作成しており時間がかかっています。
+全体で 3 分ほどかかっており、特に大部分を占めているのが neovim の build です。
 しかし neovim 以外は 1 分程度でセットアップが完了しており、 今後のクラウド linux vm でも活用できそうです。
 
 [![asciicast](https://asciinema.org/a/NNVJbxIzed74mtGt3UXJ1UZpc.svg)](https://asciinema.org/a/NNVJbxIzed74mtGt3UXJ1UZpc)
@@ -48,9 +48,9 @@ https://deflis.hatenablog.com/entry/hatena-advent-calendar-2022-chezmoi-dotfiles
 
 https://www.chezmoi.io/reference/special-files-and-directories/chezmoiignore/
 
-chezmoi で管理したくないファイルやディレクトリを指定できます。
+`.chezmoiinogre` を利用する個で、chezmoi で管理したくないファイルやディレクトリを指定できます。
 
-自分の場合 `.config/tmux/tmux.conf` 以外は chezmoi で管理しない設定をしています。
+自分の場合 `.config/tmux/tmux.conf` 以外の tmux ファイルは chezmoi で管理しない設定をしています。
 これによって `chezmoi add .config/tmux` を実行しても `tmux.conf` のみ dotfiles ディレクトリで変更が追跡されます。
 
 ```bash
@@ -94,16 +94,16 @@ clone.args = ["--depth", "1", "-b", "main"]
 しかし、 dotfiles リポジトリで chezmoi apply を実行すると、 submodule に含まれる `.` 拡張子が sync されませんでした。
 つまり、 AstroNvim リポジトリ内の `.` から始まるファイルが sync されず、 `~/.config/nvim` に含まれませんでした。
 
-そのため chezmoi で外部リポジトリや外部パッケージを扱う際は `.chezmoiexternal.toml` を利用したほうが良いかなと思います。
+そのため chezmoi で外部リポジトリや外部パッケージを扱う際は `.chezmoiexternal.toml` を利用したほうがよいかなと思います。
 
 # ユーザスクリプト
 
-dotfiles で実現したい機能として以下 2 種類があると思います。
+dotfiles で実現したい機能として以下 2 種類があります。
 
 1. `.zshrc` や `.gitconfig` などの設定ファイルを他環境でも手軽に利用する
 2. `ripgrep` や `curl` `tmux` など、自分が利用するコマンド・パッケージを用意する（環境構築）
 
-1 の設定ファイルを他環境でも手軽に利用するについては、 `chezmoi add .zshrc` などをすれば自動的に配置されるため工夫がいりません。
+1 の「設定ファイルを他環境でも手軽に利用する」については、 `chezmoi add .zshrc` などをすれば自動的に配置されるため特に工夫しなくてよいです。
 しかし、`ripgrep` `curl` など自分が利用したいコマンド・パッケージの環境構築は自動では行えません。
 なにかしらのパッケージマネージャを利用して、これら依存パッケージをインストールする必要があります。
 
