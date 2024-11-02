@@ -3,7 +3,7 @@ title: "2024/10 時点における自宅サーバまとめと今後の展望"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["自宅サーバ", "kubernetes", "argocd"]
-published: false
+published: true
 ---
 
 # はじめに
