@@ -3,7 +3,7 @@ title: "[参加記] ISUCON14 にチーム nanase として参加しました"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["isucon", "isucon14"]
-published: false
+published: true
 ---
 
 # はじめに
