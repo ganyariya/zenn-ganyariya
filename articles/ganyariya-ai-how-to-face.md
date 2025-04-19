@@ -3,7 +3,7 @@ title: "[2025/04] ganyariya の AI に対する向き合い方についてまと
 emoji: "📌"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["ai", "copilot", "claude", "vibe coding"]
-published: false
+published: true
 ---
 
 # はじめに
@@ -136,3 +136,8 @@ devin や各 Model の API など、高いものについては個人ではや�
 なお、 devin を 1 回勉強がてら使ってみよう、などの知見を広める系ではどんどんお金を出そうと思います。
 
 GitHub Copilot や Cursor、Cline などのベースプランについてはその時々に応じてどれか 1 つは契約しようと思います。
+
+# 最後に
+
+自分にとって AI はあくまでも補助輪であってほしいのだなとあらためて思いました。
+このまま AI がどんどん進化していったらそのようなワガママは捨てて、 AI 主導を受け入れないといけないのですかね...。
