@@ -8,7 +8,7 @@ help:
 
 .PHONY: article
 article: ## SLUG option
-	npx zenn new:article --slug $(SLUG)
+	npx zenn new:article --published true --slug $(SLUG)
 	git checkout -b $(SLUG)
 	open http://localhost:$(PORT) || true
 	echo "http://localhost:/$(PORT)"
