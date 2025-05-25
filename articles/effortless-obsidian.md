@@ -3,7 +3,7 @@ title: "がんばらない Obsidian"
 emoji: "📚"
 type: "idea"
 topics: ["Obsidian", "Scrapbox", "Zettelkasten"]
-published: false
+published: true
 ---
 
 # はじめに
