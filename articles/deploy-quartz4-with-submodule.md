@@ -58,7 +58,7 @@ Obsidian Vault を Quartz でデプロイするにあたって、先駆者の方
 https://github.com/ganyariya/ganyariya-obsidian-quartz
 
 ganyariya-obsidian はただの Obsidian Vault であり、 Markdown を普段通り管理するリポジトリです。
-Quartz4 のことはできるだけ意識していません。ただし、 YAML frontmatter については `title` `date` を用意する、などを意識します。
+Quartz4 のことはできるだけ意識していません。ただし、 YAML frontmatter については意識しており、 `title` `date` などを設定しています。
 
 ganyariya-obsidian-quartz は Quartz4 を `Use This Template` でもってきたものです。
 Quartz4 では `/content` フォルダに Markdown を入れることで静的サイトとして生成されます。
@@ -161,7 +161,7 @@ https://note.ganyariya.dev/01_Note/Quartz4-%E3%81%AE-content-%E3%81%AB-private-s
 
 https://roboin.io/article/2024/04/25/how-to-use-git-submodules-with-cloudflare-pages/#goog_rewarded
 
-そのため、こちらの記事を参考に private リポジトリを SSH 認証で submodule 登録することにしました。
+そのため、ろぼいんさんの記事を参考に private リポジトリを SSH 認証で submodule 登録することにしました。
 やったことは url 設定を `git@` に書き換えるのみです。
 
 https://github.com/ganyariya/ganyariya-obsidian-quartz/commit/e506bc4e8846fa949181c6c7841a8f1eed6e3cb2
