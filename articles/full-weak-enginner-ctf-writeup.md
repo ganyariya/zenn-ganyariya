@@ -382,6 +382,8 @@ if __name__ == '__main__':
 
 ## 学び
 
+https://note.ganyariya.dev/01_Note/Unicode-%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-Python-%E3%81%AE-Docs-%E3%82%92%E8%AA%AD%E3%82%80
+
 - Unicode はすべての文字にコードポイントという一意性のある数字を割り振っている
 - 各コードポイントをどういうバイト列で表現するか、というエンコーディングに UTF-8, UTF-16 など複数の種類がある
 - str と bytes が相互変換でき、 `bytes[]` を decode することで str に自動変換できる
@@ -732,3 +734,123 @@ Audacity で音声ファイルとして読み込んだりしましたがこれ�
 
 `VLC Media Player だと表示できることがある`
 
+# ❌️ GeoGuessr2
+
+![](https://storage.googleapis.com/zenn-user-upload/7dd957e59a29-20250902.png)
+
+上記の画像が与えられるため、こちらをもとに場所を探してねという問題です。
+
+こちらの画像を Google 検索したところ、 Instagram の投稿が見つかりました。
+
+https://www.threads.com/@donnieosullivan/post/DDb8jEjthA2
+
+これら画像を詳しくみると以下のような情報がわかります。
+
+- Kaisertor や Suppen からドイツである
+- マインツという都市である
+- カイザー通りに存在する
+
+カイザー通りを Google Map 上で歩いたのですが、このような光景を見つけられませんでした。
+
+## 他の方の解答を参考にする
+
+https://zenn.dev/sutonchoko/articles/efc7fa69135eaa#%5Bforensic%2Fosint%2C-easy%5D-geoguessr2-(320-solves)
+
+惜しいところまではいけていたのですね、悔しいです。
+画像にギリギリ表示されている `Maydonoz Döner` という店名から Map を検索し、その地点を出します。
+すると、提示された画像と似た光景が見つかります。
+
+![](https://storage.googleapis.com/zenn-user-upload/bca90d646a86-20250902.png)
+
+フランクフルト、ならびに似た店の画像を探したのですが、そもそも Google Map 上にないこともあるのですね。
+
+![](https://storage.googleapis.com/zenn-user-upload/fb2f78bcb013-20250902.png)
+
+## 学び
+
+- 写真を gemini に食わせて、文字を認識させて読み取ってもらう
+- Google Map が作成されたときと写真が取られているときで光景が異なる
+- Google 画像検索を利用して探す
+
+# 🔺 No need Logical Thinking
+
+## 問題
+
+`Challenge.pl` と output.txt が与えられます。
+
+```txt:output.txt
+gyhgyl|qoj\>@@xqDD|zyJyg}UD¡
+```
+
+```pl
+process_flag(FileName) :-
+    open(FileName, read, Stream),           
+    read_string(Stream, _, Content),        
+    close(Stream),                          
+    string_codes(Content, Codes),           
+    transform_codes(Codes, 1, Transformed),
+    string_codes(NewString, Transformed),   
+    writeln(NewString).                     
+
+
+transform_codes([], _, []).
+transform_codes([H|T], Index, [NewH|NewT]) :-
+    NewH is H + Index,                      
+    NextIndex is Index + 1,                  
+    transform_codes(T, NextIndex, NewT).     
+
+
+%EXECUTE
+%?- process_flag('flag.txt').
+```
+
+## 解法
+
+見慣れないコードならびに拡張子のため、まずは何のコードなのか調べます。
+インターネット検索すると Perl でしたが、 gemini に聞いたところ Prolog と教えてもらいました。
+Perl と Prolog ともに拡張子同じなのですね。
+
+https://www.ncaq.net/2023/08/03/00/41/41/
+
+Prolog のコードを自分は読めないため gemini に python に変換してもらいました。
+
+```py
+def process_flag(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    transformed_chars = []
+    for index, char in enumerate(content, 1):
+        transformed_code = ord(char) + index
+        transformed_chars.append(chr(transformed_code))
+
+    new_string = "".join(transformed_chars)
+    print(new_string)
+
+process_flag('flag.txt')
+```
+
+よって、あとは復元するコードを python で書けばよいです。
+
+```py
+def decode_flag(file_path: str) -> None:
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    transformed_chars = []
+    for index, char in enumerate(content, 1):
+        transformed_code = ord(char) - index
+        transformed_chars.append(chr(transformed_code))
+
+    decoded = ''.join(transformed_chars)
+    print(decoded)
+
+decode_flag('output.txt')
+```
+
+```bash
+❯ python3 res.py
+fwectf{the_Pr010g_10gica1_Languag3!}
+```
+
+# ❌️ Pwn Me Baby
