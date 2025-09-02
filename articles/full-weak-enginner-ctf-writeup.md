@@ -10,14 +10,14 @@ published: true
 
 ![](https://storage.googleapis.com/zenn-user-upload/57f0a7fb733d-20250901.png)
 
-[Full Weak Engineer CTF 2025](https://ctf.fwectf.com/) に参加させていただきました。素敵なコンテストを開いていただきありがとうございました！
+[Full Weak Engineer CTF 2025](https://ctf.fwectf.com/) に参加させていただきました。素敵なコンテストを開いていただきありがとうございました。
 
 ganyariya は個人チーム srrr として参加し 271 位でした。もっと精進したいです。
 
 ![](https://storage.googleapis.com/zenn-user-upload/e65ca5078742-20250901.png)
 
 この記事では ganyariya がコンテスト中に取り組んだ問題の Writeup を書きます。
-なお、解けなかった問題については別途復習するためそちらについては[個人の Note](https://note.ganyariya.dev/) もしくは zenn で別途記載します。
+なお、解けなかった問題については別途復習するため、そちらについては[個人の Note](https://note.ganyariya.dev/) もしくは zenn で別途記載します。
 
 各タイトルに下記のマークを設定しています。
 
@@ -228,7 +228,7 @@ chrome で書き換えるのではなく curl の `-b 'key=value; key2=value2;..
 GeoGuessr のような形式の問題が CTF でも出るのですね...。
 KFC の画像が与えられるためこの場所を探します。
 
-`kentucky fried chicken 1065` で検索すると 1065 店舗目？の KFC が見つかります。
+`kentucky fried chicken 1065` で検索すると 1065 店舗目の KFC が見つかります。
 あとはその緯度と経度を求めればよいです。
 
 https://locations.kfc.com/ca/sunnyvale/1065-east-el-camino-real
@@ -277,7 +277,8 @@ if __name__ == '__main__':
 ```
 
 `Hello!` を encode してみると `🐴🙅🥬🍴🎉🚀🚀🚀` となります。
-よって、問題文で与えられた絵文字列は `problem = encode(flag)` なものであり、これを `flag = decode(problem)` のように復元する `decode` メソッドを実装すればよいです。
+よって、問題文で与えられた絵文字列は `problem = encode(flag)` と表記できます。
+これを `flag = decode(problem)` のように復元する `decode` メソッドを実装すればよいです。
 
 ## 解法
 
@@ -289,15 +290,13 @@ enc: 🐴🙅🥬🍴🎉🚀🚀🚀
 
 decode メソッドを実装するために、まずを chall.py を詳しくみてみます。
 
-やっている処理は
+やっている処理は以下です。
 
-1. 'Hello!' を .encode() で bytes に変換する
+1. `'Hello!'` を .encode() で bytes に変換する
 2. bytes を `8` の 2 進数に変換して join する
 3. 10 bit 単位になるように padding する
-4. 10 bit ごとに分割し、得られた 10bit ごとに整数に変換して絵文字テーブルから絵文字を取得する
+4. 10 bit ごとに分割し、得られた 10bit ごとに整数へ変換して絵文字テーブルから絵文字を取得する
 5. 絵文字の数が 4 の倍数になるように末尾に :rocket: をつける
-
-です。
 
 ```py:chall.py
 with open('emoji.txt', 'r', encoding='utf-8') as f:
@@ -666,13 +665,13 @@ console.log(`Started server: http://localhost:3000`)
 ## 解法
 
 2 個の hono server `(app, app2)` が立っており、　random-domain.chal3.fwectf.com:8004 でアクセスできるのは app です。
-k8s や docker によって `random-domain.chal3.fwectf.com:8004` が service 3000 port に紐づけられているのだとおもいます。
+
+k8s や docker によって `random-domain.chal3.fwectf.com:8004` が service 3000 port へ紐づけられているのだとおもいます。
 
 フラグを得るためには app2 の `toggle` Endpoint を呼び出す必要があります。
 しかし、おそらくこの app2 のポートはインターネットに公開されておらず外部からはアクセスできません。
 
-脆弱な実装として `app` の `/fetch` という Endpoint が公開されています。
-この `/fetch` を利用すると `?url=hoge` として指定した url へ app server がリクエストを送ってくれます。
+脆弱な実装として `app` の `/fetch` という Endpoint が公開されており、 `?url=hoge` として指定した url へ app server はリクエストを送ってくれます。
 この場合リクエスト送信元が `app` という hono server となるため、 app → app2 という内部リクエストではファイアウォールブロックがされていない可能性が高いです。
 よって、 `/fetch` Endpoint を利用して app2 の toggle を呼び出すとよさそうです。
 
@@ -683,11 +682,15 @@ https://blog.tokumaru.org/2018/12/introduction-to-ssrf-server-side-request-forge
 
 https://zenn.dev/chot/articles/88ea57e3108978
 
-ただし、 `const isAllowedURL = (u: URL) => u.protocol === "http:" && !["localhost", "0.0.0.0", "127.0.0.1"].includes(u.hostname)` というガードがかけられており、これらのエンドポイントではアクセスできません。
+```ts
+const isAllowedURL = (u: URL) => !["localhost", "0.0.0.0", "127.0.0.1"].includes(u.hostname)
+```
+
+ただし、上記のようにアクセスできる URL が定められています。
 
 https://qiita.com/1ain2/items/194a9372798eaef6c5ab
 
-コンテスト中に gemini に聞いたところ `lvh.me` というドメインがローカルアドレスとして解決される、とのことでした。
+コンテスト中に gemini へ聞いたところ `lvh.me` というドメインがローカルアドレスとして解決される、とのことでした。
 コンテスト後に知りましたが lvh.me は levicook さんという方が立てた DNS であり、公式なものではありません。
 利用を避けたほうがよいですね...。
 
@@ -720,8 +723,8 @@ mac で開こうとしたところ開けませんよ、とポップアップが�
 
 https://note.com/gtakuya/n/na67fd821b99f
 
-strings などで中身を見ようとしましたがフラグが得られなかったため Audacity で音声ファイルとして読み込んだりしましたらこれもうまく動作しませんでした。
-最終的に VLC Media Player で開いたところ再生でき、フラグが表示されました。
+Audacity で音声ファイルとして読み込んだりしましたがこれもうまく動作しませんでした。
+最終的に VLC Media Player をつかって再生でき、フラグが表示されました。
 
 ![](https://storage.googleapis.com/zenn-user-upload/01824eebb4f8-20250902.png)
 
