@@ -854,3 +854,44 @@ fwectf{the_Pr010g_10gica1_Languag3!}
 ```
 
 # ❌️ Pwn Me Baby
+
+## 問題
+
+![](https://storage.googleapis.com/zenn-user-upload/f812f2c3f0ab-20250902.png)
+
+`nc chal2.fwectf.com 8000` でプログラムが動いており、それに不正な入力をおこなってフラグを獲得する問題です。
+サーバでは以下のプログラムが動いています。
+
+```c
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+
+void flag(){
+  char buf[128]={0};
+  int fd=open("flag.txt",O_RDONLY);
+  if(fd==-1){
+    puts("Couldn't find flag.txt");
+    return;
+  }
+  read(fd,buf,128);
+  puts(buf);
+}
+
+int main(void){
+  char buf[16];
+  printf("I will receive a message and do nothing else:");
+  scanf("%s",buf);
+  return 0;
+}
+
+__attribute__((constructor)) void init() {
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+}
+```
+
+`scanf("%s", buf)` がいかにも怪しくここに不正な入力をすれば強引に flag 関数が実行できそうです。
+しかし、自分はこの flag 関数を呼び出す方法がわからずコンテスト中解けませんでした。
+そのため、きちんと調べて学習したうえで解きます。
