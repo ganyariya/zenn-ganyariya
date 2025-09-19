@@ -812,7 +812,7 @@ Perl と Prolog ともに拡張子同じなのですね。
 
 https://www.ncaq.net/2023/08/03/00/41/41/
 
-Prolog のコードを自分は読めないため gemini に python に変換してもらいました。
+Prolog のコードを自分は読めないため gemini に python へ変換してもらいました。
 
 ```py
 def process_flag(file_path):
@@ -906,8 +906,7 @@ https://note.ganyariya.dev/05_CTF/(Full-Weak-Engineer-CTF-2025)-Pwn-Me-Baby-%E3%
 
 pwntools で配布された main ELF ファイルのセキュリティ機構を調べます。
 すると `PIE: No PIE (0x400000)` と表示されます。
-No PIE の場合、 .text 機械語命令が絶対的なアドレス指定がなされ、そのアドレスに命令が配置されないとうまく動かなくなります。
-PIE であればどのアドレスに置かれても正しく動くようになっていますが、それが無効化されています。
+No PIE の場合、 .text 機械語命令を特定の決まったメモリアドレスに配置しないとうまく実行できなくなります。
 
 よって、 flag / main 関数のアドレスが実行時にランダム化されず、特定のアドレスに配置されることがわかります。
 ゆえに、 scanf でうまく攻撃テキストを入力すれば、 flag 関数を呼び出せそうです。
@@ -926,13 +925,12 @@ PIE であればどのアドレスに置かれても正しく動くようにな�
 
 ### 攻撃コードを入力する
 
-前知識として関数が利用する `スタックフレーム` への理解ならびにアセンブリコードへの理解が必要になります。
+前知識として関数が利用する `スタックフレーム` ならびにアセンブリコードへの理解が必要になります。
 下記 note などを参考ください。
 
 https://note.ganyariya.dev/01_Note/x86-64-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E9%96%A2%E6%95%B0%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E6%99%82%E3%81%AE%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E6%8C%99%E5%8B%95%E3%82%92%E8%AA%BF%E3%81%B9%E3%82%8B
 
 gdb でレジスタの値やアセンブリコードを覗くと、 main 関数の実行時は以下のようなスタックフレームの構造になっています。
-scanf でデータを入力すると、正しい使い方であれば 0x7fffffffea00 から 0x7fffffffea10 まで 16 文字 (NULL 文字を考慮すれば 15 文字) が配置されます。
 
 ```bash
 0x0
@@ -951,7 +949,8 @@ __libc_start_call_main のスタックフレーム
 0x00000000FFFFFFFFF
 ```
 
-ここで `aaaaaaaaaaaaaaaaaaaaaaaa\x10\x18\x40\x0\x0\x0\x0\x0` と入力すれば、 `__libc_start_call_main へのリターンアドレス` を書き換えられます。
+ここで `aaaaaaaaaaaaaaaaaaaaaaaa\x10\x18\x40\x0\x0\x0\x0\x0` と入力しましょう。
+すると、`__libc_start_call_main へのリターンアドレス` を書き換えられます。
 
 - a * 24
   - パディング
@@ -1022,7 +1021,7 @@ I will receive a message and do nothing else:fwectf{fake_flag}
 I will receive a message and do nothing else:Segmentation fault (core dumped)
 ```
 
-pwntools を使う、かつ ROP 攻撃のパターンも note に記載しているので興味ある方はご参照ください。
+pwntools を使う、かつ ROP 攻撃のパターンも note に記載しているので興味あるかたはご参照ください。
 
 ```py
 #!/usr/bin/env python3
