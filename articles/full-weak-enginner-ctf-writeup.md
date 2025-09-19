@@ -1056,3 +1056,34 @@ data = p.recvline().decode().rstrip()
 print(data)
 ```
 
+## ❌️ QR
+
+Later.
+
+## ❌ Adversarial Login
+
+Later.
+
+## ❌ Flagcraft
+
+Later.
+
+## ❌ MPKC1
+
+Later.
+
+## ❌ MPKC2
+
+Later.
+
+## ❌ Guide to heap
+
+Later.
+
+# まとめ
+
+新生児のお世話もあり集中して参加する、ということは叶いませんでしたがとても楽しいコンテストでした。
+開催いただいた主催者のみなさま、ありがとうございました。
+
+コミュニティになにも参加しておらず、エンジニアの友人少ないのなんとかしないといけない気持ちになりますね。
+一緒に CTF するようなかたがいないので...。
