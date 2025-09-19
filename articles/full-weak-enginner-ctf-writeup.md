@@ -27,6 +27,10 @@ ganyariya は個人チーム srrr として参加し 271 位でした。もっ�
 | Solved-WithAI | 🔺    |
 | Unsolved      | ❌️    |
 
+なお、コンテストで利用された配布ファイルについては下記 GitHub で公開されています。
+
+https://github.com/full-weak-engineer/FWE_CTF_2025_public
+
 # ✅️ Welcome
 
 ![](https://storage.googleapis.com/zenn-user-upload/f2f413a14ea6-20250901.png)
