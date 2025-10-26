@@ -2,7 +2,7 @@
 title: "C# の非同期処理について不自由さ克服のための移り変わりから学ぶ"
 emoji: "🌊"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+topics: ["C#", "非同期処理"]
 published: true
 ---
 
