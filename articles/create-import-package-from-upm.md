@@ -2,7 +2,7 @@
 title: "パッケージを自作したうえで Unity Package Manager から git URL でインポートする"
 emoji: "👏"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["unity"]
+topics: ["unity", "git"]
 published: true
 ---
 
@@ -496,3 +496,9 @@ https://github.com/ganyariya/UnitySample_AdderUser/pull/2
 
 `Packages/[PackageName]` のように開発すると、利用者側は `?path=/Packages/[PackageName]` のように指定してインポートしないといけず面倒です。
 `Packages/[PackageName]` 配下を submodule として開発し、そのまま配布する、というのも手なのかもしれませんね。
+
+## 参考文献
+
+https://note.ganyariya.dev/01_Note/Unity-%E3%81%AE-Package-%E3%82%92%E8%87%AA%E4%BD%9C%E3%81%97%E3%81%9F%E3%81%86%E3%81%88%E3%81%A7-git-%E7%B5%8C%E7%94%B1%E3%81%A7-UTM-%E3%81%A7%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B
+
+https://www.hanachiru-blog.com/entry/2023/10/23/120000
