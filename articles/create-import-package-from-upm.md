@@ -6,16 +6,6 @@ topics: ["unity", "git"]
 published: true
 ---
 
-
-```cardlink
-url: https://www.hanachiru-blog.com/entry/2023/10/23/120000
-title: "【Unity】Unity Package Manager(UPM)が認識する自作Packageを作成し、git経由でインストールできるまで整える - はなちるのマイノート"
-description: "はじめに 今回は自作パッケージを作成しPackageManagerのAdd package from git URLからインストールできるようにする手法について紹介したいと思います。 実際にインストールしている様子 はじめに カスタムパッケージの作成 ファイル・フォルダを生成する 中身を記述する package.json [company-name].[package-name].asmdef [company-name].[package-name].Editor.asmdef Package Managerから確認する Add package from git URLからインストールできる…"
-host: www.hanachiru-blog.com
-favicon: https://www.hanachiru-blog.com/icon/link
-image: https://cdn.image.st-hatena.com/image/scale/5296831d2d0d0a1c41b632fa4f23ca8b4ad64986/backend=imagemagick;version=1;width=1300/https%3A%2F%2Fcdn-ak.f.st-hatena.com%2Fimages%2Ffotolife%2Fh%2Fhanaaaaaachiru%2F20231022%2F20231022002307.png
-```
-
 # はじめに
 
 おしごとにおいて Unity を使いはじめました。
