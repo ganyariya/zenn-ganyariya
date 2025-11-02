@@ -25,9 +25,9 @@ image: https://cdn.image.st-hatena.com/image/scale/5296831d2d0d0a1c41b632fa4f23c
 車輪の再開発を避けられ、開発が効率的になるためです。
 
 しかし、 ganyariya は Unity におけるパッケージ開発ならびに GitHub 経由のインポートの仕組みを知りませんでした。
-この記事では、簡単なパッケージを自作したうえで git URL 経由でインポートする手順を備忘録としてまとめます。
+この記事では、簡単なパッケージを自作したうえで git URL によってインポートする手順を備忘録としてまとめます。
 
-自分と同様にこの作業をしたことがない方にとって参考になるかとおもいます。
+自分と同様にこの作業をしたことがないかたにとって参考になるかとおもいます。
 
 ## 取り扱うことと取り扱わないこと
 
@@ -71,7 +71,7 @@ Unity エディタ上で見ると `package.json:displayName` で表示される�
 ## パッケージ開発用プロジェクトを用意する
 
 UnitySample_Adder というプロジェクトを新たに作成します。
-これは ただの空 Scene しかないプロジェクトです。
+これはただの空 Scene しかないプロジェクトです。
 
 https://github.com/ganyariya/UnitySample_Adder/tree/568385142dd9abd205a3ecef79747701fced1fa3
 
@@ -196,7 +196,7 @@ Editor の asmdef ファイルには下記の変更を加えています。
 - Assembly Definition References に `com.ganyariya.adderpackage` を指定している
 	- Runtime で実装した機能を Editor で利用するため
 - Platforms を `Editor` のみにする
-	- Editor 配下で実装したものは Unity 開発中でしか有効にしないため (Publish Build に入れたくない)
+	- Editor 配下で実装したものは Unity 開発中でしか有効にしないため (Publish Build へ入れたくない)
 
 ![Imgur](https://i.imgur.com/WP5mEKI.png)
 
@@ -303,7 +303,7 @@ namespace Ganyariya.SampleAdder
 }
 ```
 
-空プロジェクトをつくったときに作成されたデフォルト Scene を再生すると、このメッセージが正しく表示されることがわかります。
+空プロジェクトをつくったときに作成されたデフォルト Scene を再生すると、このメッセージが正しく表示されています。
 
 ![Imgur](https://i.imgur.com/jg35fZn.png)
 
@@ -319,11 +319,13 @@ Samples フォルダを作成し、 com.ganyariya.adderpackage.sample という 
 設定内容は画像のとおりです。
 注意すべき点として、Platform を Any Platform としています。
 
+<!-- textlint-disable -->
 :::message
-実は最初 Platform を `Editor` のみにしていたのですが、 後述する `AdderConsoleLogger` を GameObject へアタッチできませんでした。。候補からそもそもでてこなかったのです。
+実は最初 Platform を `Editor` のみにしていたのですが、 後述する `AdderConsoleLogger` を GameObject へアタッチできませんでした。候補からそもそもでてこなかったのです。
 これは Unity において実行時 (Runtime) に MonoBehaviour がアタッチされる仕組みであり、 `Editor` のものは表示されないのが原因であると考えられます。
 よって Any Platform に変更しています。
 :::
+<!-- textlint-enable -->
 
 
 ![Imgur](https://i.imgur.com/EQ6RJHg.png)
@@ -351,7 +353,7 @@ namespace Ganyariya.SampleAdder.Sample
 }
 ```
 
-上記の AdderConsoleLogger を AdderConsoleLoggerGameObject へアタッチし AdderSampleScene を実行したところ、正しくログが表示されました。
+上記の AdderConsoleLogger を AdderConsoleLoggerGameObject へアタッチしシーンを実行したところ、正しくログが表示されました。
 このように Samples 配下へテストシーンを用意することで、どのようにライブラリを使うのかを説明できそうです。
 
 ![Imgur](https://i.imgur.com/UxSUplc.png)
@@ -378,12 +380,10 @@ UnityPackageManager へ GitHub への URL で追加するときのレファレ�
 
 https://orotiyamatano.hatenablog.com/entry/2023/05/30/%E3%80%90%E5%82%99%E5%BF%98%E9%8C%B2%E3%80%91%28Unity%29git%E3%81%8B%E3%82%89PackageManager%E3%81%B8%E3%81%AE%E8%BF%BD%E5%8A%A0%E6%96%B9%E6%B3%95
 
-今回のケースでは
-
 - https://github.com/ganyariya/UnitySample_Adder を repository 対象とする
-- package.json があるのは https://github.com/ganyariya/UnitySample_Adder/tree/main/Packages/com.ganyariya.adderpackage になる
+- package.json があるのは `UnitySample_Adder/Packages/com.ganyariya.adderpackage` になる
 
-ことから、入力すべき git URL は以下になります。
+上記のことから、今回入力すべき git URL は以下になります。
 
 ```bash
 https://github.com/ganyariya/UnitySample_Adder.git?path=/Packages/com.ganyariya.adderpackage
@@ -391,7 +391,7 @@ https://github.com/ganyariya/UnitySample_Adder.git?path=/Packages/com.ganyariya.
 
 ![Imgur](https://i.imgur.com/HUtbnO3.png)
 
-インストールが完了すると `SampleAdder` が正しく表示されています。
+インストールが完了すると `SampleAdder` パッケージの情報が期待通りに表示されています。
 
 ![Imgur](https://i.imgur.com/VAS4Gi0.png)
 
@@ -420,7 +420,7 @@ https://github.com/ganyariya/UnitySample_AdderUser/pull/1
 
 ## 余談: パッケージがローカルマシン上のどこに保存されるか
 
-ちなみに、 UnitySample_AdderUser プロジェクト上で Adder.cs を開くと `UnitySample_AdderUser/Library/PackageCache` というディレクトリに存在しました。
+ちなみに、 UnitySample_AdderUser 上で Adder.cs を開くと `UnitySample_AdderUser/Library/PackageCache` に存在しました。
 
 ![Imgur](https://i.imgur.com/VstJdFL.png)
 
@@ -494,5 +494,5 @@ https://github.com/ganyariya/UnitySample_AdderUser/pull/2
 	- ライブラリ開発用 UnityProject の `Packages/[PackageName]` でつくるとよい
 - GitHub 経由でインポートする場合は package.json の path を入力する
 
-`Packages/[PackageName]` のように開発すると、利用者側は `https://.....?path=/Packages/[PackageName]` のように指定してインポートしないといけず面倒です。
+`Packages/[PackageName]` のように開発すると、利用者側は `?path=/Packages/[PackageName]` のように指定してインポートしないといけず面倒です。
 `Packages/[PackageName]` 配下を submodule として開発し、そのまま配布する、というのも手なのかもしれませんね。
